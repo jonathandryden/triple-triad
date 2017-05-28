@@ -1,0 +1,14 @@
+{
+  "name": "triple-triad",
+  "version": "1.0.0",
+  "description": "a card game from final fantasy",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests --recursive"
+  },
+  "author": "Jonathan Dryden",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.0.0"
+  }
+}
