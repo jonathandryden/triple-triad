@@ -1,6 +1,7 @@
 var chai = require("chai");
 var assert = chai.assert;
 var Game = require("../Game.js");
+var Card = require("../Card.js");
 
 describe("Game Class", function(){
   it("Should Create A Game", function(done) {
@@ -12,5 +13,12 @@ describe("Game Class", function(){
     assert.equal(temp.board[1].length, 3);
     assert.equal(temp.board[2].length, 3);
     done();
+  });
+});
+
+describe("Card Class", function() {
+  it("Should Create A Card", function() {
+    var card = new Card();
+    assert.isNotNull(card);
   });
 });
