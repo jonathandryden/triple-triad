@@ -1,3 +1,5 @@
+var Player = require("./Player.js");
+
 class Game {
   constructor() {
     this.name = "Triple Triad";
@@ -6,7 +8,7 @@ class Game {
       [null, null, null],
       [null, null, null]
     ];
-    this.players = [null, null];
+    this.players = [new Player(1, []), new Player(2, [])];
   }
 }
 

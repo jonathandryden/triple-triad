@@ -1,6 +1,6 @@
 class Player {
-  constructor() {
-    this.num = 0;
+  constructor(num, cards) {
+    this.num = num;
     this.cards = [null, null, null, null, null];
   }
 }
