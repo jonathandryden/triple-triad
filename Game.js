@@ -6,7 +6,7 @@ class Game {
       [null, null, null],
       [null, null, null]
     ];
-
+    this.players = [null, null];
   }
 }
 
