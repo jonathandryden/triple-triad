@@ -29,6 +29,8 @@ describe("Game Class", function(){
     assert.equal(game.board[1].length, 3);
     assert.equal(game.board[2].length, 3);
     assert.equal(game.players.length, 2);
+    assert.equal(game.players[0].cards.length, 5);
+    assert.equal(game.players[1].cards.length, 5);
     done();
   });
 });
