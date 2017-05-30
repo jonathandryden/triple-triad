@@ -1,8 +1,8 @@
-var chai = require("chai");
-var assert = chai.assert;
-var Game = require("../Game.js");
-var Card = require("../Card.js");
-var Player = require("../Player.js");
+const chai = require("chai");
+const assert = chai.assert;
+const Game = require("../Game.js");
+const Card = require("../Card.js");
+const Player = require("../Player.js");
 
 describe("Card Class", function() {
   it("Should Create A Card", function() {

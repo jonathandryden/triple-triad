@@ -1,5 +1,5 @@
-var Player = require("./Player.js");
-var Card = require("./Card.js");
+const Player = require("./Player.js");
+const Card = require("./Card.js");
 
 class Game {
   constructor() {
@@ -13,7 +13,16 @@ class Game {
   }
 
   generateCards() {
+    // access num of cards in card db and pick random number in it 5 times
     return [new Card(), new Card(), new Card(), new Card(), new Card()];
+  }
+
+  playMove(move) {
+    // TODO take a move object and apply
+  }
+
+  processBoard() {
+    // TODO do calcs here
   }
 }
 
