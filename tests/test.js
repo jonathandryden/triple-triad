@@ -56,5 +56,6 @@ describe("Game Class", function(){
     game.placeCard(topStrong, {"x":0, "y":1});
     assert.isNotNull(game.board[0][0]);
     assert.isNotNull(game.board[1][0]);
+    assert.equal(game.score[1], 2);
   });
 });

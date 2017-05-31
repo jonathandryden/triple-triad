@@ -11,8 +11,9 @@ class Game {
       [undefined, undefined, undefined]
     ];
     this.players = [new Player(1, this.generateCards(1)), new Player(2, this.generateCards(2))];
+    this.score = [0, 0];
   }
-  
+
   generateCards(player) {
     // TODO redo this
     var generatedCards = [];
@@ -84,7 +85,20 @@ class Game {
   }
 
   updateScore() {
-    // TODO
+    this.score = [0, 0];
+
+    for (var i = 0, len = this.board.length; i < len; i++) {
+      for (var j = 0, len2 = this.board[i].length; j < len; j++) {
+        if (this.board[i][j]) {
+          if (this.board[i][j].color) {
+            this.score[1]++;
+          } else {
+            this.score[0]++;
+          }
+        }
+      }
+    }
+    // TODO end game?
   }
 }
 
