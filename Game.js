@@ -2,9 +2,18 @@ var Player = require("./Player.js");
 var Card = require("./Card.js");
 var CardDb = require("./cards.json");
 
+var hasEmptyCells = function(board) {
+  for (var i = 0, len = board.length; i < len; i++) {
+    var index = board[i].indexOf();
+    if (index !== -1) return true;
+  }
+  return false;
+}
+
 class Game {
   constructor() {
     this.name = "Triple Triad";
+    this.isGameOver = false;
     this.board = [
       [undefined, undefined, undefined],
       [undefined, undefined, undefined],
@@ -99,6 +108,7 @@ class Game {
       }
     }
     // TODO end game?
+    if (!hasEmptyCells(this.board)) this.isGameOver = true;
   }
 }
 

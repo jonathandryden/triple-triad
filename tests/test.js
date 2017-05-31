@@ -5,6 +5,27 @@ const Card = require("../Card.js");
 const Player = require("../Player.js");
 const mockCards = require("./mock/cards.json");
 
+var drawBoard = function(board) {
+  var msg = "_________________________\r\n";
+  for(var i = 0; i < 3; i++) {
+    msg += "[";
+    for(var j = 0; j < 3; j++) {
+      if (board[i][j] != undefined) {
+        msg += " " + (board[i][j].color ? "b" : "r") + board[i][j].rank.top + board[i][j].rank.right + board[i][j].rank.bottom + board[i][j].rank.left + " ";
+      } else {
+        msg += " xNULL ";
+      }
+      if (j < 2) {
+        msg += "|";
+      }
+    }
+    msg += "]\r\n";
+  }
+  msg += "-------------------------";
+
+  console.log(msg);
+}
+
 describe("Card Class", function() {
   it("Should Create A Card", function() {
     var card = new Card({
@@ -57,5 +78,34 @@ describe("Game Class", function(){
     assert.isNotNull(game.board[0][0]);
     assert.isNotNull(game.board[1][0]);
     assert.equal(game.score[1], 2);
+    assert.isFalse(game.isGameOver);
+  });
+
+  it("Should complete a board", function(){
+    var game = new Game();
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    var card = mockCards[0];
+    game.placeCard(card, {"x":1,"y":1}); // 9111
+    card = mockCards[1];
+    card.color = true;
+    game.placeCard(card, {"x":0, "y":1}); // 1911
+    card = mockCards[11];
+    game.placeCard(card, {"x":2,"y":0}); // 1111
+    card.color = true;
+    game.placeCard(card, {"x":0,"y":0});
+    card.color = false;
+    game.placeCard(card, {"x": 2, "y": 2});
+    card.color = true;
+    game.placeCard(card, {"x":0, "y": 2});
+    card = mockCards[10];
+    game.placeCard(card, {"x":2, "y":1}); // 9999
+    card.color = true;
+    game.placeCard(card, {"x":1, "y": 0});
+    card.color = false;
+    game.placeCard(card, {"x":1, "y": 2});
+    assert.equal(game.score[0], 8);
+    assert.equal(game.score[1], 1);
+    assert.isTrue(game.isGameOver);
   });
 });
