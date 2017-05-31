@@ -12,7 +12,7 @@ class Game {
     ];
     this.players = [new Player(1, this.generateCards(1)), new Player(2, this.generateCards(2))];
   }
-
+  
   generateCards(player) {
     // TODO redo this
     var generatedCards = [];
@@ -78,7 +78,7 @@ class Game {
         }
       }
     }
-    
+
     this.updateScore();
     return 0;
   }
