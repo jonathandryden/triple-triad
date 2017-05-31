@@ -1,8 +1,10 @@
 class Card {
   constructor(properties) {
-    this.power = {
-      top: "", right: "", bottom: "", left: ""
-    }
+    this.id = properties.id;
+    this.color = properties.color;
+    this.attr = properties.attr;
+    this.rank = properties.rank;
+    this.img = properties.img;
   }
 }
 

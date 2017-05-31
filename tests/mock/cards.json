@@ -1,0 +1,170 @@
+[
+  {
+    "id": 0,
+    "name":"Dendrobium",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":9,
+      "right":1,
+      "bottom":1,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 1,
+    "name":"Feather Circle",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":9,
+      "bottom":1,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 2,
+    "name":"Flan",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":1,
+      "bottom":9,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 3,
+    "name":"Garuda",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":1,
+      "bottom":1,
+      "left":9
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 4,
+    "name":"Ghost",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":9,
+      "right":9,
+      "bottom":1,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 5,
+    "name":"Hedgehogpie",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":9,
+      "right":1,
+      "bottom":9,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 6,
+    "name":"Hornet",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":9,
+      "right":1,
+      "bottom":1,
+      "left":9
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 7,
+    "name":"Ladybug",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":9,
+      "bottom":9,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 8,
+    "name":"Mandragora",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":1,
+      "bottom":9,
+      "left":9
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 9,
+    "name":"Mu",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":9,
+      "bottom":9,
+      "left":9
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 10,
+    "name":"Skeleton",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":9,
+      "right":9,
+      "bottom":9,
+      "left":9
+    },
+    "attr": null,
+    "color":false
+  },
+  {
+    "id": 11,
+    "name":"Paper",
+    "level":1,
+    "game":"IX",
+    "rank":{
+      "top":1,
+      "right":1,
+      "bottom":1,
+      "left":1
+    },
+    "attr": null,
+    "color":false
+  }
+]
