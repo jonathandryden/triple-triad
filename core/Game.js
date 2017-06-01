@@ -1,9 +1,11 @@
-var Player = require("./Player.js");
-var Card = require("./Card.js");
-var CardDb = require("./cards.json");
+"use strict";
+
+const Player = require("./Player.js");
+const Card = require("./Card.js");
+const CardDb = require("./cards.json");
 
 var hasEmptyCells = function(board) {
-  for (var i = 0, len = board.length; i < len; i++) {
+  for (let i = 0, len = board.length; i < len; i++) {
     var index = board[i].indexOf();
     if (index !== -1) return true;
   }
@@ -19,16 +21,16 @@ class Game {
       [undefined, undefined, undefined],
       [undefined, undefined, undefined]
     ];
-    this.players = [new Player(1, this.generateCards(1)), new Player(2, this.generateCards(2))];
+    this.players = [new Player(1, this.generateCards(1))
+      , new Player(2, this.generateCards(2))];
     this.score = [0, 0];
   }
 
   generateCards(player) {
-    // TODO redo this
     var generatedCards = [];
-    for(var i = 0; i<5; i++) {
+    for (let i = 0; i<5; i++) {
       var randomId = Math.floor((Math.random() * 10));
-      for (var j = 0, len = CardDb.length; j<len; j++){
+      for (let j = 0, len = CardDb.length; j<len; j++){
         if (CardDb[j].id === randomId) {
           var card = new Card(CardDb[j]);
           if (player === 2) {
@@ -96,8 +98,8 @@ class Game {
   updateScore() {
     this.score = [0, 0];
 
-    for (var i = 0, len = this.board.length; i < len; i++) {
-      for (var j = 0, len2 = this.board[i].length; j < len; j++) {
+    for (let i = 0, len = this.board.length; i < len; i++) {
+      for (let j = 0, len2 = this.board[i].length; j < len; j++) {
         if (this.board[i][j]) {
           if (this.board[i][j].color) {
             this.score[1]++;
@@ -107,7 +109,7 @@ class Game {
         }
       }
     }
-    // TODO end game?
+
     if (!hasEmptyCells(this.board)) this.isGameOver = true;
   }
 }

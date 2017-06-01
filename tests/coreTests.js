@@ -1,17 +1,21 @@
+"use strict";
+
 const chai = require("chai");
 const assert = chai.assert;
-const Game = require("../Game.js");
-const Card = require("../Card.js");
-const Player = require("../Player.js");
+const Game = require("../core/Game.js");
+const Card = require("../core/Card.js");
+const Player = require("../core/Player.js");
 const mockCards = require("./mock/cards.json");
 
 var drawBoard = function(board) {
   var msg = "_________________________\r\n";
-  for(var i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     msg += "[";
-    for(var j = 0; j < 3; j++) {
+    for (let j = 0; j < 3; j++) {
       if (board[i][j] != undefined) {
-        msg += " " + (board[i][j].color ? "b" : "r") + board[i][j].rank.top + board[i][j].rank.right + board[i][j].rank.bottom + board[i][j].rank.left + " ";
+        msg += " " + (board[i][j].color ? "b" : "r") + board[i][j].rank.top
+          + board[i][j].rank.right + board[i][j].rank.bottom
+          + board[i][j].rank.left + " ";
       } else {
         msg += " xNULL ";
       }
@@ -46,7 +50,8 @@ describe("Card Class", function() {
 
 describe("Player Class", function() {
   it("Should Create A Player", function() {
-    var player = new Player(1, [undefined, undefined, undefined, undefined, undefined]);
+    var player = new Player(1
+      , [undefined, undefined, undefined, undefined, undefined]);
     assert.isNotNull(player);
     assert.equal(player.cards.length, 5);
   });
