@@ -92,7 +92,6 @@ class Game {
     }
 
     this.updateScore();
-    return 0;
   }
 
   updateScore() {

@@ -9,6 +9,10 @@
   "author": "Jonathan Dryden",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^4.0.0"
+    "chai": "^4.0.0",
+    "socket.io-client": "^2.0.2"
+  },
+  "dependencies": {
+    "socket.io": "^2.0.2"
   }
 }
