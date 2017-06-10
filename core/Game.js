@@ -13,17 +13,25 @@ var hasEmptyCells = function(board) {
 }
 
 class Game {
-  constructor() {
-    this.name = "Triple Triad";
-    this.isGameOver = false;
-    this.board = [
-      [undefined, undefined, undefined],
-      [undefined, undefined, undefined],
-      [undefined, undefined, undefined]
-    ];
-    this.players = [new Player(1, this.generateCards(1))
-      , new Player(2, this.generateCards(2))];
-    this.score = [0, 0];
+  constructor(game) {
+    if (game) {
+      this.name = game.name;
+      this.isGameOver = game.isGameOver;
+      this.board = game.board;
+      this.players = game.players;
+      this.score = game.score;
+    } else {
+      this.name = "Triple Triad";
+      this.isGameOver = false;
+      this.board = [
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined]
+      ];
+      this.players = [new Player(1, this.generateCards(1))
+        , new Player(2, this.generateCards(2))];
+      this.score = [0, 0];
+    }
   }
 
   generateCards(player) {
