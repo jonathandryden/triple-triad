@@ -52,27 +52,19 @@ class Game {
   }
 
   placeCard(card, location) {
-    console.dir(this);
-    console.log("location");
-    console.dir(location);
-    console.log("card");
-    console.dir(card);
-    console.log("board place");
-    console.log(this.board[location.y][location.x]);
-    if (this.board[location.y][location.x] != undefined) {
+    let x = Number(location.x),
+    y = Number(location.y);
+
+    if (this.board[y][x] != undefined) {
       return 1;
     }
-
-    this.board[location.y][location.x] = card;
-    console.log("SET");
-    console.log(this.board[location.y][location.x]);
+    
+    this.board[y][x] = card;
     
     var opposingCard = undefined;
     // check top
-    if (location.y - 1 >= 0) {
-      opposingCard = this.board[location.y - 1][location.x];
-      console.log("op y-1");
-      console.log(opposingCard);
+    if (y - 1 >= 0) {
+      opposingCard = this.board[y - 1][x];
       if (opposingCard != undefined && opposingCard.color != card.color) {
         if (card.rank.top > opposingCard.rank.bottom) {
           opposingCard.color = card.color;
@@ -81,10 +73,8 @@ class Game {
     }
 
     // check right
-    if (location.x + 1 <= 2) {
-      opposingCard = this.board[location.y][location.x + 1];
-      console.log("op x+1");
-      console.log(opposingCard);
+    if (x + 1 <= 2) {
+      opposingCard = this.board[y][x + 1];
       if (opposingCard != undefined && opposingCard.color != card.color) {
         if (card.rank.right > opposingCard.rank.left) {
           opposingCard.color = card.color;
@@ -93,10 +83,8 @@ class Game {
     }
 
     // check bottom
-    if (location.y + 1 <= 2) {
-      opposingCard = this.board[location.y + 1][location.x];
-      console.log("op y+1");
-      console.log(opposingCard);
+    if (y + 1 <= 2) {
+      opposingCard = this.board[y + 1][x];
       if (opposingCard != undefined && opposingCard.color != card.color) {
         if (card.rank.bottom > opposingCard.rank.top) {
           opposingCard.color = card.color;
@@ -105,10 +93,8 @@ class Game {
     }
 
     // check left
-    if (location.x - 1 >= 0) {
-      opposingCard = this.board[location.y][location.x - 1];
-      console.log("op x-1");
-      console.log(opposingCard);
+    if (x - 1 >= 0) {
+      opposingCard = this.board[y][x - 1];
       if (opposingCard != undefined && opposingCard.color != card.color) {
         if (card.rank.left > opposingCard.rank.right) {
           opposingCard.color = card.color;

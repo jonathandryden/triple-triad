@@ -33,13 +33,13 @@ class DataStorageClient{
         if (err) {
           Logger.error(err);
           db.close();
-          return;
-        }
-        db.close();
-        if (docs.length > 0) {
-            cb(new Game(docs[0].game));
         } else {
-          cb();
+          db.close();
+          if (docs.length > 0) {
+              cb(new Game(docs[0].game));
+          } else {
+            cb();
+          }
         }
       });
     });

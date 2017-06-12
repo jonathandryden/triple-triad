@@ -31,13 +31,13 @@ var createGame = function(names) {
 var joinGame = function(names) {
   let sock = this;
   DataStorageClient.FindGameByName(names.game, function(game) {
-    console.dir(game.players);
+    // console.dir(game.players);
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
         + ` game was not found.`);
     }
     if (game && !game.players[1].name) {
-      console.log('undefined');
+      // console.log('undefined');
       game.players[1].name = names.player;
 
       sock.join(game.name);
@@ -61,17 +61,7 @@ var joinGame = function(names) {
   });
 }
 
-var playMove = function(move) {
-  /*TODO: move {
-            gameName
-            playerName
-            cardId/name
-            Position
-          }
-  */
-  console.dir(move);
-  console.dir(move.position);
-  
+var playMove = function(move) {  
   var sock = this;
   DataStorageClient.FindGameByName(move.gameName, function(game) {
     if (!game) {
@@ -92,7 +82,7 @@ var playMove = function(move) {
       return;
     }
 
-    array.splice(index, 1);
+    game.players[playerNumber].cards.splice(cardIndex, 1);
 
     IO.sockets.in(game.name).emit("updateGame", game);
   });
