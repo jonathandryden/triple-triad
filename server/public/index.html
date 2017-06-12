@@ -1,0 +1,167 @@
+<html><head>
+  <script
+			  src="https://code.jquery.com/jquery-2.2.4.min.js"
+			  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+			  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"/></script>
+</head>
+<body>
+  <input type="text" id="name" placeholder="playername" />
+  <br />
+  <input type="text" id="room" placeholder="roomname" /> <button id="create">create</button> <button id="join">join</button>
+  <br />
+  <br/>
+  <table style="float:left; background-color: #FF9999;"> <!--66b2ff-->
+    <tr>
+      <td>YOU <span id="ys">0</span></td>
+    </tr>
+    <tr>
+      <td><button class="card" id="y0">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button class="card" id="y1">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button class="card" id="y2">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button class="card" id="y3">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button class="card" id="y4">tesT</button></td>
+    </tr>
+  </table>
+  <table style="float:left;">
+    <tr>
+      <td><button class="place" id="00">_____</button></td>
+      <td><button class="place" id="10">_____</button></td>
+      <td><button class="place" id="20">_____</button></td>
+    </tr>
+    <tr>
+      <td><button class="place" id="01">_____</button></td>
+      <td><button class="place" id="11">_____</button></td>
+      <td><button class="place" id="21">_____</button></td>
+    </tr>
+    <tr>
+      <td><button class="place" id="02">_____</button></td>
+      <td><button class="place" id="12">_____</button></td>
+      <td><button class="place" id="22">_____</button></td>
+    </tr>
+  </table>
+  <table style="float:left; background-color: #66b2ff;"> <!--66b2ff-->
+    <tr>
+      <td>THEM <span id="ts">0</span></td>
+    </tr>
+    <tr>
+      <td><button id="t0">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button id="t1">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button id="t2">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button id="t3">tesT</button></td>
+    </tr>
+    <tr>
+      <td><button id="t4">tesT</button></td>
+    </tr>
+  </table>
+  <script>
+    // var drawBoard = function(board) {
+    //     for (var y = 0; y < 3; y++) {
+    //       for (var x = 0; x < 3; x++) {
+    //         var card = board[y][x];
+    //         var temp = "";
+    //         if (card !== undefined) {
+    //           temp += card.color ? "b" : "r";
+    //           temp += card.rank.top + "\r\n";
+    //         }
+    //       }
+    //     }
+    // }
+
+    $(function() {
+      var socket = io();
+
+      var selectedCard = undefined;
+      var placeToMove = undefined;
+      var num = undefined;
+
+      $("#create").click(function() {
+        socket.emit("create", {game: $("#room").val(), player: $("#name").val()});
+      });
+      $("#join").click(function() {
+        socket.emit("join", {game: $("#room").val(), player: $("#name").val()});
+      });
+
+      socket.on("updateGame", function(game) {
+        console.log("game");
+        console.dir(game);
+
+        num = (num === undefined ? ($("#name").val() === game.players[0].name ? 0 : 1) : num);
+
+        for(var y = 0; y < 3; y++) {
+          for (var x = 0; i < 3; x++) {
+            var card = game.board[y][x];
+            if (card !== undefined) {
+              var temp = card.color ? "b" : "r";
+              temp += card.rank.top + card.rank.right + card.rank.bottom + card.rank.left;
+              $("#" + x + y).text(temp);
+            }
+          }
+        }
+
+        var player = num;
+        $("#ys").text(game.score[player]);
+        console.log("player: " + player);
+        for (var i = 0; i < 5; i++) {
+          var card = game.players[player].cards[i];
+          console.dir(card);
+          var temp =  (card.color ? "b" : "r") + card.rank.top + card.rank.right + card.rank.bottom + card.rank.left;
+          console.log(temp);
+          $("#y" + i).text(temp);
+        }
+
+
+        player = num === 0 ? 1 : 0;
+        $("#ts").text(game.score[player]);
+        console.log("player: " + player);
+        for (var i = 0; i < game.players[player].cards.length; i++) {
+          var card = game.players[player].cards[i];
+          console.dir(card);
+          var temp = (card.color ? "b" : "r") + card.rank.top + card.rank.right + card.rank.bottom + card.rank.left;
+          console.log(temp);
+          $("#t" + i).text(temp);
+        }
+      });
+
+      $(".card").click(function() {
+        var id = this.id;
+        selectedCard = id[1];
+        console.log("SELECTED: " + selectedCard);
+      });
+
+      $(".place").click(function() {
+        console.log("PLACING");
+        if (placeToMove !== undefined || selectedCard === undefined
+          || num === undefined) return;
+        var id = this.id;
+        placeToMove = {x: id[0], y: id[1]}
+        var move = {
+          gameName: $("#room").val(),
+          player: num,
+          cardId: selectedCard,
+          position: placeToMove
+        };
+        console.log("move");
+        console.dir(move);
+        socket.emit("placeCard", move);
+        placeToMove === undefined;
+        selectedCard === undefined;
+      });
+    });
+  </script>
+</body>
+</html>

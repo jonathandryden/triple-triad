@@ -20,7 +20,7 @@ var createGame = function(names) {
 
       Logger.log(`Created a game with the name of ${game.name}`);
 
-      IO.sockets.in(game.name).emit("hello", game.board);
+      IO.sockets.in(game.name).emit("updateGame", game);
     } else {
       Logger.warn(`Tried to create a game with the name of ${names.game}. But`
         + ` game with that name already exists`);
@@ -31,10 +31,21 @@ var createGame = function(names) {
 var joinGame = function(names) {
   let sock = this;
   DataStorageClient.FindGameByName(names.game, function(game) {
+    console.dir(game.players);
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
         + ` game was not found.`);
-    } else if (game && game.players[1].name === undefined) {
+    }
+    if (game && !game.players[1].name) {
+      console.log('undefined');
+      game.players[1].name = names.player;
+
+      sock.join(game.name);
+
+      IO.sockets.in(game.name).emit("updateGame", game);
+    }
+    /*
+    else if (game && game.players[1].name === null) {
       // make the player
       game.players[1].name = names.player;
       // TODO: emit board
@@ -46,6 +57,7 @@ var joinGame = function(names) {
       Logger.warn(`Tried to join a game with the name of ${names.game}. But`
         + ` was not one of the players`);
     }
+    */
   });
 }
 
@@ -57,41 +69,32 @@ var playMove = function(move) {
             Position
           }
   */
+  console.dir(move);
+  console.dir(move.position);
+  
   var sock = this;
   DataStorageClient.FindGameByName(move.gameName, function(game) {
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
         + ` game was not found.`);
       return;
-    } else if (game && (game.players[0].name !== move.playerName
-        && game.players[1].name !== move.playerName)) {
-      Logger.Warn(`Tried to play on a game with the name of ${names.game}. But`
-        + ` they were not one of the players.`);
-      return;
     }
 
-    let playerNumber = (game.players[1].name === move.playerName ? 1 : 0),
-    card = undefined,
-    cardIndex = 0;
+    let playerNumber = move.player;
+    card = game.players[playerNumber].cards[move.cardId],
+    cardIndex = move.cardId;
 
-    for (let i = 0; i < game.players[playerNumber].cards.length; i++) {
-      if (game.players[playerNumber].cards[i].id === move.cardId) {
-        card = game.players[playerNumber].cards[i];
-        cardIndex = i;
-      }
-    }
-
-    var status = game.placeCard(card, move.location);
+    var status = game.placeCard(card, move.position);
 
     if (status === 1) {
       Logger.warn(`Tried to play a card in an invalid position. `
-        + `()${move.location.x}, ${move.location.y}0`);
+        + `(${move.position.x}, ${move.position.y})`);
       return;
     }
 
     array.splice(index, 1);
 
-    // TODO: update client game
+    IO.sockets.in(game.name).emit("updateGame", game);
   });
 }
 
@@ -117,6 +120,8 @@ module.exports = function(io) {
     socket.on("find", function(name) {
       DataStorageClient.FindGameByName(name);
     });
-    socket.on("join", createGame);
+    socket.on("create", createGame);
+    socket.on("join", joinGame);
+    socket.on("placeCard", playMove);
   });
 }
