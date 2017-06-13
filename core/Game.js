@@ -58,9 +58,9 @@ class Game {
     if (this.board[y][x] != undefined) {
       return 1;
     }
-    
+    console.log("x " + x + " y " + y);
     this.board[y][x] = card;
-    
+
     var opposingCard = undefined;
     // check top
     if (y - 1 >= 0) {

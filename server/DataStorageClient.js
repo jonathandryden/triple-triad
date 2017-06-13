@@ -45,7 +45,7 @@ class DataStorageClient{
     });
   }
 
-  UpdateGame(game) {
+  UpdateGame(game, cb) {
     MongoClient.connect(url, function(err, db) {
       if (err) {
         Logger.error(err);
@@ -56,6 +56,7 @@ class DataStorageClient{
         if (err) {
           Logger.error(err);
         }
+        cb();
       });
     });
   }

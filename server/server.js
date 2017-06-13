@@ -61,8 +61,8 @@ var joinGame = function(names) {
   });
 }
 
-var playMove = function(move) {  
-  var sock = this;
+var playMove = function(move) {
+  let sock = this;
   DataStorageClient.FindGameByName(move.gameName, function(game) {
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
@@ -70,7 +70,7 @@ var playMove = function(move) {
       return;
     }
 
-    let playerNumber = move.player;
+    let playerNumber = move.player,
     card = game.players[playerNumber].cards[move.cardId],
     cardIndex = move.cardId;
 
@@ -82,9 +82,11 @@ var playMove = function(move) {
       return;
     }
 
-    game.players[playerNumber].cards.splice(cardIndex, 1);
+    game.players[playerNumber].cards[cardIndex] = undefined;
 
-    IO.sockets.in(game.name).emit("updateGame", game);
+    DataStorageClient.UpdateGame(game, function() {
+      IO.sockets.in(game.name).emit("updateGame", game);
+    });
   });
 }
 

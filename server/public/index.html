@@ -11,7 +11,7 @@
   <input type="text" id="room" placeholder="roomname" /> <button id="create">create</button> <button id="join">join</button>
   <br />
   <br/>
-  <table style="float:left; background-color: #FF9999;"> <!--66b2ff-->
+  <table id="you" style="float:left;"> <!--background-color: #FF9999; 66b2ff-->
     <tr>
       <td>YOU <span id="ys">0</span></td>
     </tr>
@@ -48,7 +48,7 @@
       <td><button class="place" id="22">_____</button></td>
     </tr>
   </table>
-  <table style="float:left; background-color: #66b2ff;"> <!--66b2ff-->
+  <table id="them" style="float:left;">
     <tr>
       <td>THEM <span id="ts">0</span></td>
     </tr>
@@ -69,19 +69,6 @@
     </tr>
   </table>
   <script>
-    // var drawBoard = function(board) {
-    //     for (var y = 0; y < 3; y++) {
-    //       for (var x = 0; x < 3; x++) {
-    //         var card = board[y][x];
-    //         var temp = "";
-    //         if (card !== undefined) {
-    //           temp += card.color ? "b" : "r";
-    //           temp += card.rank.top + "\r\n";
-    //         }
-    //       }
-    //     }
-    // }
-
     $(function() {
       var socket = io();
 
@@ -89,84 +76,84 @@
       var placeToMove = undefined;
       var num = undefined;
 
-      $("#create").click(function() {
-        socket.emit("create", {game: $("#room").val(), player: $("#name").val()});
-      });
-      $("#join").click(function() {
-        socket.emit("join", {game: $("#room").val(), player: $("#name").val()});
-      });
-
-      socket.on("updateGame", function(game) {
-        console.log("game");
-        console.dir(game);
-
-        num = (num === undefined ? ($("#name").val() === game.players[0].name ? 0 : 1) : num);
-        
-        for(var y = 0; y < 3; y++) {
-          for (var x = 0; i < 3; x++) {
-            var card = game.board[y][x];
-            if (card !== undefined) {
-              var temp = card.color ? "b" : "r";
-              temp += card.rank.top + card.rank.right + card.rank.bottom + card.rank.left;
-              $("#" + x + y).text(temp);
-            }
-          }
-        }
-
-        var player = num;
-        $("#ys").text(game.score[player]);
-        console.log("player: " + player);
-        for (var i = 0; i < 5; i++) {
-          $("#y"+i).text("_____");
-        }
-        for (var i = 0; i < 5; i++) {
-          var card = game.players[player].cards[i];
-          console.dir(card);
-          var temp =  (card.color ? "b" : "r") + card.rank.top + card.rank.right + card.rank.bottom + card.rank.left;
-          console.log(temp);
-          $("#y" + i).text(temp);
-        }
-
-
-        player = num === 0 ? 1 : 0;
-        $("#ts").text(game.score[player]);
-        console.log("player: " + player);
-        for (var i = 0; i < 5; i++) {
-          $("#t"+i).text("_____");
-        }
-        for (var i = 0; i < game.players[player].cards.length; i++) {
-          var card = game.players[player].cards[i];
-          console.dir(card);
-          var temp = (card.color ? "b" : "r") + card.rank.top + card.rank.right + card.rank.bottom + card.rank.left;
-          console.log(temp);
-          $("#t" + i).text(temp);
-        }
-      });
-
-      $(".card").click(function() {
-        var id = this.id;
-        selectedCard = id[1];
-        console.log("SELECTED: " + selectedCard);
-      });
-
-      $(".place").click(function() {
-        console.log("PLACING");
+      // actions
+      var createGame = function() {
+        socket.emit("create", {game: $("#room").val()
+          , player: $("#name").val()});
+      }
+      var joinGame = function() {
+        socket.emit("join", {game: $("#room").val()
+          , player: $("#name").val()});
+      }
+      var selectCard = function() {
+        selectedCard = this.id[1];
+      }
+      var placeCard = function() {
         if (placeToMove !== undefined || selectedCard === undefined
           || num === undefined) return;
-        var id = this.id;
-        placeToMove = {x: id[0], y: id[1]}
+        placeToMove = {x: this.id[0], y: this.id[1]}
         var move = {
           gameName: $("#room").val(),
           player: num,
           cardId: selectedCard,
           position: placeToMove
         };
-        console.log("move");
-        console.dir(move);
+
         socket.emit("placeCard", move);
-        placeToMove === undefined;
-        selectedCard === undefined;
-      });
+        placeToMove = undefined;
+        selectedCard = undefined;
+      }
+
+      //utilities
+      var getCardValue = function(card) {
+        return (card.color ? "b" : "r") + card.rank.top + card.rank.right
+          + card.rank.bottom + card.rank.left;
+      }
+      var updateGame = function(game) {
+        console.dir(game.players);
+        num = (num === undefined ?
+          ($("#name").val() === game.players[0].name ? 0 : 1) : num);
+
+        // draw board
+        for (let y = 0; y < 3; y++) {
+          for (let x = 0; x < 3; x++) {
+            if (game.board[y][x]) {
+              $("#" + x + "" + y).text(getCardValue(game.board[y][x]));
+            }
+          }
+        }
+
+        // draw your cards
+        var player = num;
+        $("#ys").text(game.score[player]);
+        for (let i = 0; i < 5; i++) {
+          if (game.players[player].cards[i]) {
+            $("#y" + i).text(getCardValue(game.players[player].cards[i]));
+          } else {
+              $("#y"+i).text("_____");
+          }
+        }
+
+        // draw other players cards
+        player = num === 0 ? 1 : 0;
+        $("#ts").text(game.score[player]);
+        for (let i = 0; i < game.players[player].cards.length; i++) {
+          if (game.players[player].cards[i]) {
+            $("#t" + i).text(getCardValue(game.players[player].cards[i]));
+          } else {
+            $("#t"+i).text("_____");
+          }
+        }
+      }
+
+      // actions
+      $("#create").click(createGame);
+      $("#join").click(joinGame);
+      $(".card").click(selectCard);
+      $(".place").click(placeCard);
+
+      // responses
+      socket.on("updateGame", updateGame);
     });
   </script>
 </body>
