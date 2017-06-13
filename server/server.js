@@ -5,6 +5,17 @@ Game = require("../core/Game.js"),
 Player = require("../core/Player.js"),
 DataStorageClient = require("./DataStorageClient.js");
 
+// utilities
+var numberOfCards = function(cards) {
+  let result = 0;
+  for (let i = 0; i < cards.length; i++) {
+    if (cards[i]) {
+      result++;
+    }
+  }
+  return result;
+}
+
 // routes
 var createGame = function(names) {
   let sock = this;
@@ -67,6 +78,16 @@ var playMove = function(move) {
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
         + ` game was not found.`);
+      return;
+    }
+    
+    // determine whos move it is // if same num of cards, its red, if red is less, its blue
+    if (numberOfCards(game.players[0].cards) === numberOfCards(game.players[1].cards) && Number(move.player) !== 0) {
+      // TODO: throw error
+      return;
+    } 
+    if (numberOfCards(game.players[0].cards) < numberOfCards(game.players[1].cards) && Number(move.player) !== 1) {
+      // TODO: throw error
       return;
     }
 
