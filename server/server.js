@@ -80,7 +80,11 @@ var playMove = function(move) {
         + ` game was not found.`);
       return;
     }
-    
+
+    if (game.isGameOver) {
+      // TODO: throw error
+      return;
+    }
     // determine whos move it is // if same num of cards, its red, if red is less, its blue
     if (numberOfCards(game.players[0].cards) === numberOfCards(game.players[1].cards) && Number(move.player) !== 0) {
       // TODO: throw error
@@ -113,22 +117,10 @@ var playMove = function(move) {
 
 module.exports = function(io) {
   IO = io;
-
-  // generate user -> username, roomname
-  //  if new user/room make a new room with a new game
-  //   on a new game wait for 2 players
-
   IO.on("connection", function(socket){
     Logger.log("User connected.");
-
-    let user = new User(socket.id);
-
-    IO.emit("sesh", socket.id);
     socket.on("disconnect", function(){
       Logger.log("User disconncted");
-    });
-    socket.on("client", function(d) {
-      console.dir(d);
     });
     socket.on("find", function(name) {
       DataStorageClient.FindGameByName(name);
