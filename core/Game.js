@@ -6,8 +6,10 @@ const CardDb = require("./cards.json");
 
 var hasEmptyCells = function(board) {
   for (let i = 0, len = board.length; i < len; i++) {
-    var index = board[i].indexOf();
-    if (index !== -1) return true;
+    for (let j = 0, len2 = board[i].length; j < len2; j++) {
+      console.log(board[i][j]);
+      if (!board[i][j]) return true;
+    }
   }
   return false;
 }

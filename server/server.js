@@ -6,6 +6,14 @@ Player = require("../core/Player.js"),
 DataStorageClient = require("./DataStorageClient.js");
 
 // utilities
+var gameCleanUp = function() {
+  Logger.info("Starting archiving old games.");
+  DataStorageClient.Archive(function() {
+    Logger.info("Finished archiving old games.");
+    setTimeout(gameCleanUp, (1000 * 60 * 60));
+  });
+}
+
 var numberOfCards = function(cards) {
   let result = 0;
   for (let i = 0; i < cards.length; i++) {
@@ -23,6 +31,7 @@ var createGame = function(names) {
     if (!game) {
       game = new Game();
       game.name = names.game;
+      game.isGameOver = false;
       game.players[0].name = names.player;
 
       DataStorageClient.AddGame(game);
@@ -74,6 +83,7 @@ var joinGame = function(names) {
 
 var playMove = function(move) {
   let sock = this;
+  console.dir(move);
   DataStorageClient.FindGameByName(move.gameName, function(game) {
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
@@ -83,15 +93,18 @@ var playMove = function(move) {
 
     if (game.isGameOver) {
       // TODO: throw error
+      Logger.log("Game is Over");
       return;
     }
     // determine whos move it is // if same num of cards, its red, if red is less, its blue
     if (numberOfCards(game.players[0].cards) === numberOfCards(game.players[1].cards) && Number(move.player) !== 0) {
       // TODO: throw error
+      Logger.log("Turn is 0");
       return;
     } 
     if (numberOfCards(game.players[0].cards) < numberOfCards(game.players[1].cards) && Number(move.player) !== 1) {
       // TODO: throw error
+      Logger.log("Turn is 1");
       return;
     }
 
@@ -117,6 +130,7 @@ var playMove = function(move) {
 
 module.exports = function(io) {
   IO = io;
+  gameCleanUp();
   IO.on("connection", function(socket){
     Logger.log("User connected.");
     socket.on("disconnect", function(){
