@@ -1,6 +1,10 @@
 # Triple Triad
 
 # Configuration
+Loggly is an optional configuration, not having it in the config file won't
+break logging.
+
+**./server/config.js**
 ```
 module.exports = {
   loggly: {
@@ -20,4 +24,5 @@ module.exports = {
 
 # How to run
 ```npm install```
+
 ```node ./server/app.js```
