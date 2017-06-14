@@ -45,8 +45,8 @@ Events your socket.io client should emit.
 
   ```
   {
-    "game": GAME_NAME,
-    "player": PLAYER_NAME
+    "game": GAME_NAME=[string],
+    "player": PLAYER_NAME=[string]
   }
   ```
 
@@ -58,8 +58,8 @@ Events your socket.io client should emit.
 
   ```
   {
-    "game": GAME_NAME,
-    "player": PLAYER_NAME
+    "game": GAME_NAME=[string],
+    "player": PLAYER_NAME=[string]
   }
   ```
 
@@ -71,12 +71,12 @@ Events your socket.io client should emit.
 
   ```
   {
-    "gameName": GAME_NAME,
-    "player": PLAYER_INDEX,
-    "cardId": CARD_INDEX,
+    "gameName": GAME_NAME=[string],
+    "player": PLAYER_INDEX=[integer],
+    "cardId": CARD_INDEX=[integer],
     "position": {
-      "x": X_COORD,
-      "y": Y_COORD
+      "x": X_DESTINATION_ON_BOARD=[integer],
+      "y": Y_DESTINATION_ON_BOARD=[integer]
     }
   }
   ```
@@ -90,6 +90,54 @@ Events your socket.io client will receive.
   This is the primary event, used to update the game board, score and player status.
 
   * **Payload**
+  
+  ```
+  {
+    "name": GAME_NAME=[string],
+    "isGameOver": IF_GAME_IS_OVER=[boolean],
+    "board": 3x3_2d_ARRAY_OF_CARDS=[card[]],
+    "players": ARRAY_OF_PLAYER=[player[]],
+    "score": ARRAY_OF_SCORE=[integer[]]
+  }
+  ```
+
+  ```
+  "board": [
+    [NULL || CARD_OBJECT, NULL || CARD_OBJECT, NULL || CARD_OBJECT],
+    [NULL || CARD_OBJECT, NULL || CARD_OBJECT, NULL || CARD_OBJECT],
+    [NULL || CARD_OBJECT, NULL || CARD_OBJECT, NULL || CARD_OBJECT]
+  ]
+  ```
+
+  ```
+  CARD_OBJECT: {
+    "id": ID_IN_DB=[integer],
+    "name": NAME_OF_CARD=[string],
+    "color": RED_OR_BLUE=[boolean],
+    "attr": NULL,
+    "rank": ARRAY_UP_RIGHT_DOWN_LEFT_POWERS=[integer[]],
+    "img": IMAGE_URL=[string]
+  }
+  ```
+
+  ```
+  "players": [
+    [
+      {
+        "name": NAME=[string],
+        "num": PLAYER_NUM_FROM_0=[integer],
+        "cards": ARRAY_OF_CARDS=[card[]]
+      }
+    ],
+    [
+      {
+        "name": NAME=[string],
+        "num": PLAYER_NUM_FROM_0=[integer],
+        "cards": ARRAY_OF_CARDS=[card[]]
+      }
+    ]
+  ]
+  ```
 
 
 # How to run
