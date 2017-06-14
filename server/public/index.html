@@ -79,12 +79,12 @@
 
       // actions
       var createGame = function(game) {
-        socket.emit("create", {game: $("#room").val()
-          , player: $("#name").val()});
+        socket.emit("create", JSON.stringify({game: $("#room").val()
+          , player: $("#name").val()}));
       }
       var joinGame = function() {
-        socket.emit("join", {game: $("#room").val()
-          , player: $("#name").val()});
+        socket.emit("join", JSON.stringify({game: $("#room").val()
+          , player: $("#name").val()}));
       }
       var selectCard = function() {
         selectedCard = this.id[1];
@@ -101,7 +101,7 @@
           position: placeToMove
         };
 
-        socket.emit("placeCard", move);
+        socket.emit("placeCard", JSON.stringify(move));
         placeToMove = undefined;
         selectedCard = undefined;
       }
@@ -121,7 +121,8 @@
         return (card.color ? "b" : "r") + card.rank.top + card.rank.right
           + card.rank.bottom + card.rank.left;
       }
-      var updateGame = function(game) {
+      var updateGame = function(data) {
+        var game = JSON.parse(game);
         // console.dir(game.players);
         num = (num === undefined ?
           ($("#name").val() === game.players[0].name ? 0 : 1) : num);

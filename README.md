@@ -1,33 +1,10 @@
 # Triple Triad
 
-# Configuration
-Logging config is optional
+A game where 2 players take turns placing cards on a 3x3 field, each card 
+numerically fighting the other, changing their color, until all positions are 
+filled.
 
-**./server/config.js**
-```
-module.exports = {
-  server: {
-    port: PORT_NUMBER
-  },
-  mongo: {
-    url: CONNECTION_URL,
-    GameCollection: COLLECTION_FOR_LIVE_GAMES,
-    GameHistoryCollection: COLLECTION_FOR_COMPLETED_GAMES,
-    ExpirationTimeInDays: 1
-  },
-  logging: {
-    file: {
-      location: FILE_PATH
-    },
-    loggly: {
-      token: LOGGLY_TOKEN,
-      subdomain: LOGGLY_SUBDOMAIN,
-      tags: [LOGGLY_TAGS],
-      json:true
-    }
-  }
-}
-```
+The player with the most cards wins.
 
 # API
 
@@ -144,7 +121,34 @@ Events your socket.io client will receive.
 
 # How to run
 
-Configure your `./server/config.js` file to include your instance of Mongo and desired port.
+Create and configure your `./server/config.js` file to include your instance of Mongo and desired port.
+Logging is optional.
+
+**./server/config.js**
+```
+module.exports = {
+  server: {
+    port: PORT_NUMBER
+  },
+  mongo: {
+    url: CONNECTION_URL,
+    GameCollection: COLLECTION_FOR_LIVE_GAMES,
+    GameHistoryCollection: COLLECTION_FOR_COMPLETED_GAMES,
+    ExpirationTimeInDays: 1
+  },
+  logging: {
+    file: {
+      location: FILE_PATH
+    },
+    loggly: {
+      token: LOGGLY_TOKEN,
+      subdomain: LOGGLY_SUBDOMAIN,
+      tags: [LOGGLY_TAGS],
+      json:true
+    }
+  }
+}
+```
 
 ```npm install```
 
