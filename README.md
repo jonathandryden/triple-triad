@@ -31,13 +31,17 @@ module.exports = {
 
 # API
 
-Parameters should be sent as a JSON object.
+Payload should be sent as a JSON object.
 
-## createGame
+## Emit
+
+Events your socket.io client should emit.
+
+### createGame
 
   This event should be called first to create a game.
   
-  * **Params**
+  * **Payload**
 
   ```
   {
@@ -46,11 +50,11 @@ Parameters should be sent as a JSON object.
   }
   ```
 
-## joinGame
+### joinGame
 
   This event should be used to join/rejoin a game.
   
-  * **Params**
+  * **Payload**
 
   ```
   {
@@ -59,11 +63,11 @@ Parameters should be sent as a JSON object.
   }
   ```
 
-## playMove
+### playMove
 
   This event should be used to play a card on the field.
   
-  * **Params**
+  * **Payload**
 
   ```
   {
@@ -76,6 +80,16 @@ Parameters should be sent as a JSON object.
     }
   }
   ```
+
+## Receive
+
+Events your socket.io client will receive.
+
+### updateGame
+
+  This is the primary event, used to update the game board, score and player status.
+
+  * **Payload**
 
 
 # How to run
