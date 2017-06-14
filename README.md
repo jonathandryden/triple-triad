@@ -31,7 +31,17 @@ module.exports = {
 
 # API
 * **createGame**
+----
   This event should be called first to create a game.
+  
+  * **Params**
+
+  ```
+  {
+    "game": GAME_NAME,
+    "player": PLAYER_NAME
+  }
+  ```
 
 * **joinGame**
   This event should be used to join/rejoin a game.

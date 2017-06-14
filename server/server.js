@@ -17,8 +17,10 @@ var gameCleanUp = function() {
 }
 
 // routes
-var createGame = function(names) {
-  let sock = this;
+var createGame = function(data) {
+  let names = JSON.parse(data),
+  sock = this;
+
   DataStorageClient.FindGameByName(names.game, function(game) {
     if (!game) {
       game = new Game();
@@ -40,8 +42,10 @@ var createGame = function(names) {
   });
 }
 
-var joinGame = function(names) {
-  let sock = this;
+var joinGame = function(data) {
+  let names = JSON.parse(names),
+  sock = this;
+
   DataStorageClient.FindGameByName(names.game, function(game) {
     // console.dir(game.players);
     if (!game) {
@@ -73,8 +77,9 @@ var joinGame = function(names) {
   });
 }
 
-var playMove = function(move) {
-  let sock = this;
+var playMove = function(data) {
+  let move = JSON.parse(data),
+  sock = this;
 
   DataStorageClient.FindGameByName(move.gameName, function(game) {
     if (!game) {
