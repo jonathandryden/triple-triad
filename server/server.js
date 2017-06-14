@@ -33,8 +33,8 @@ var createGame = function(data) {
       sock.join(game.name);
 
       Logger.log(`Created a game with the name of ${game.name}`);
-
-      IO.sockets.in(game.name).emit("updateGame", game);
+      
+      IO.sockets.in(game.name).emit("updateGame", JSON.stringify(game));
     } else {
       Logger.warn(`Tried to create a game with the name of ${names.game}. But`
         + ` game with that name already exists`);
@@ -58,7 +58,7 @@ var joinGame = function(data) {
 
       sock.join(game.name);
 
-      IO.sockets.in(game.name).emit("updateGame", game);
+      IO.sockets.in(game.name).emit("updateGame", JSON.stringify(game));
     }
     /*
     else if (game && game.players[1].name === null) {
@@ -98,7 +98,7 @@ var playMove = function(data) {
         console.log(err.message);
       } else {
         DataStorageClient.UpdateGame(game, function() {
-          IO.sockets.in(game.name).emit("updateGame", game);
+          IO.sockets.in(game.name).emit("updateGame", JSON.stringify(game));
         });
       }
     });

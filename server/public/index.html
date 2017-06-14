@@ -122,8 +122,8 @@
           + card.rank.bottom + card.rank.left;
       }
       var updateGame = function(data) {
-        var game = JSON.parse(game);
-        // console.dir(game.players);
+        var game = JSON.parse(data);
+        
         num = (num === undefined ?
           ($("#name").val() === game.players[0].name ? 0 : 1) : num);
 
