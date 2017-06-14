@@ -7,7 +7,7 @@ Logging config is optional
 ```
 module.exports = {
   server: {
-    port: 3000
+    port: PORT_NUMBER
   },
   mongo: {
     url: CONNECTION_URL,
@@ -30,8 +30,11 @@ module.exports = {
 ```
 
 # API
-* **createGame**
-----
+
+Parameters should be sent as a JSON object.
+
+## createGame
+
   This event should be called first to create a game.
   
   * **Params**
@@ -43,14 +46,48 @@ module.exports = {
   }
   ```
 
-* **joinGame**
-  This event should be used to join/rejoin a game.
+## joinGame
 
-* **playMove**
+  This event should be used to join/rejoin a game.
+  
+  * **Params**
+
+  ```
+  {
+    "game": GAME_NAME,
+    "player": PLAYER_NAME
+  }
+  ```
+
+## playMove
+
   This event should be used to play a card on the field.
+  
+  * **Params**
+
+  ```
+  {
+    "gameName": GAME_NAME,
+    "player": PLAYER_INDEX,
+    "cardId": CARD_INDEX,
+    "position": {
+      "x": X_COORD,
+      "y": Y_COORD
+    }
+  }
+  ```
 
 
 # How to run
+
+Configure your `./server/config.js` file to include your instance of Mongo and desired port.
+
 ```npm install```
 
 ```node ./server/app.js```
+
+Go to `IP_ADDRESS:PORT` for the web client or make your socket.io calls to `IP_ADDRESS:PORT`.
+
+# Dependencies
+
+* MongoDB
