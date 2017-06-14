@@ -16,16 +16,6 @@ var gameCleanUp = function() {
   });
 }
 
-var numberOfCards = function(cards) {
-  let result = 0;
-  for (let i = 0; i < cards.length; i++) {
-    if (cards[i]) {
-      result++;
-    }
-  }
-  return result;
-}
-
 // routes
 var createGame = function(names) {
   let sock = this;
@@ -92,55 +82,35 @@ var playMove = function(move) {
         + ` game was not found.`);
       return;
     }
-
     if (game.isGameOver) {
       // TODO: throw error
       Logger.log("Game is Over");
       return;
     }
-    // determine whos move it is // if same num of cards, its red, if red is less, its blue
-    if (numberOfCards(game.players[0].cards) === numberOfCards(game.players[1].cards) && Number(move.player) !== 0) {
-      // TODO: throw error
-      Logger.log("Turn is 0");
-      return;
-    }
-    if (numberOfCards(game.players[0].cards) < numberOfCards(game.players[1].cards) && Number(move.player) !== 1) {
-      // TODO: throw error
-      Logger.log("Turn is 1");
-      return;
-    }
 
-    let playerNumber = move.player,
-    card = game.players[playerNumber].cards[move.cardId],
-    cardIndex = move.cardId;
-
-    var status = game.placeCard(card, move.position);
-
-    if (status === 1) {
-      Logger.warn(`Tried to play a card in an invalid position. `
-        + `(${move.position.x}, ${move.position.y})`);
-      return;
-    }
-
-    game.players[playerNumber].cards[cardIndex] = undefined;
-
-    DataStorageClient.UpdateGame(game, function() {
-      IO.sockets.in(game.name).emit("updateGame", game);
+    game.placeCard(move.player, move.cardId, move.position, function(err, result) {
+      if (err) {
+        console.log(err.message);
+      } else {
+        DataStorageClient.UpdateGame(game, function() {
+          IO.sockets.in(game.name).emit("updateGame", game);
+        });
+      }
     });
   });
 }
 
 module.exports = function(io) {
   IO = io;
+  
   gameCleanUp();
+
   IO.on("connection", function(socket){
     Logger.log("User connected.");
     socket.on("disconnect", function(){
       Logger.log("User disconncted");
     });
-    socket.on("find", function(name) {
-      DataStorageClient.FindGameByName(name);
-    });
+
     socket.on("create", createGame);
     socket.on("join", joinGame);
     socket.on("placeCard", playMove);

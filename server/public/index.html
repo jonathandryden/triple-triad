@@ -90,9 +90,9 @@
         selectedCard = this.id[1];
       }
       var placeCard = function() {
-        if (turn !== num) return;
-        if (placeToMove !== undefined || selectedCard === undefined
-          || num === undefined) return;
+        // if (turn !== num) return;
+        // if (placeToMove !== undefined || selectedCard === undefined
+        //   || num === undefined) return;
         placeToMove = {x: this.id[0], y: this.id[1]}
         var move = {
           gameName: $("#room").val(),

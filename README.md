@@ -29,6 +29,17 @@ module.exports = {
 }
 ```
 
+# API
+* **createGame**
+  This event should be called first to create a game.
+
+* **joinGame**
+  This event should be used to join/rejoin a game.
+
+* **playMove**
+  This event should be used to play a card on the field.
+
+
 # How to run
 ```npm install```
 

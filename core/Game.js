@@ -1,8 +1,7 @@
-"use strict";
-
 const Player = require("./Player.js"),
 Card = require("./Card.js"),
-CardDb = require("./cards.json");
+CardDb = require("./cards.json"),
+Errors = require("./Errors");
 
 // utilities
 var hasEmptyCells = function(board) {
@@ -12,6 +11,16 @@ var hasEmptyCells = function(board) {
     }
   }
   return false;
+}
+
+var numberOfCards = function(cards) {
+  let result = 0;
+  for (let i = 0; i < cards.length; i++) {
+    if (cards[i]) {
+      result++;
+    }
+  }
+  return result;
 }
 
 var compareCards = function(card, dir, opposingCard, def) {
@@ -61,17 +70,34 @@ class Game {
     return generatedCards;
   }
 
-  placeCard(card, location) {
+  placeCard(player, cardIndex, location, callBack) {
     let x = Number(location.x),
-    y = Number(location.y);
+    y = Number(location.y),
+    card = null;
+
+    if ((numberOfCards(this.players[0].cards) === numberOfCards(this.players[1].cards) && Number(player) !== 0) 
+    || (numberOfCards(this.players[0].cards) < numberOfCards(this.players[1].cards) && Number(player) !== 1)) {
+      callBack(new Errors.InvalidAction("It is not your turn to move."));
+      return;
+    }
 
     if (this.board[y][x] != undefined) {
-      return 1;
+      callBack(new Errors.InvalidAction("This area of the field is occupied already."));
+      return;
+    }
+
+    card = this.players[player].cards[cardIndex];
+    
+    if (!card) {
+      callBack(new Errors.InvalidAction("The card played does not exist in the players hand."));
+      return;
     }
 
     this.board[y][x] = card;
-
+    this.players[player].cards[cardIndex] = undefined;
+    
     var opposingCard = undefined;
+
     // check top
     if (y - 1 >= 0) {
       compareCards(card, "top", this.board[y-1][x], "bottom");
@@ -93,6 +119,8 @@ class Game {
     }
 
     this.updateScore();
+
+    callBack(null, this.score);
   }
 
   updateScore() {
