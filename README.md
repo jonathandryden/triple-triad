@@ -101,6 +101,8 @@ Events your socket.io client will receive.
   }
   ```
 
+      * Details
+
   ```
   "board": [
     [NULL || CARD_OBJECT, NULL || CARD_OBJECT, NULL || CARD_OBJECT],
