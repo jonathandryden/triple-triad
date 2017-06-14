@@ -9,10 +9,8 @@ DataStorageClient = require("./DataStorageClient.js");
 var gameCleanUp = function() {
   Logger.log("CLEANUP - Archiving");
   DataStorageClient.Archive(function() {
-    Logger.log("CLEANUP - Finished archiving");
     Logger.log("CLEANUP - Deleting");
     DataStorageClient.GarbageCollector(function() {
-      Logger.log("CLEANUP - Finished deleting");
       setTimeout(gameCleanUp, (1000 * 60 * 60));
     });
   });

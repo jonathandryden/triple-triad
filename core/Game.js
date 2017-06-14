@@ -1,9 +1,10 @@
 "use strict";
 
-const Player = require("./Player.js");
-const Card = require("./Card.js");
-const CardDb = require("./cards.json");
+const Player = require("./Player.js"),
+Card = require("./Card.js"),
+CardDb = require("./cards.json");
 
+// utilities
 var hasEmptyCells = function(board) {
   for (let i = 0, len = board.length; i < len; i++) {
     for (let j = 0, len2 = board[i].length; j < len2; j++) {

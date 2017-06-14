@@ -1,8 +1,7 @@
 # Triple Triad
 
 # Configuration
-Loggly is an optional configuration, not having it in the config file won't
-break logging.
+Logging config is optional
 
 **./server/config.js**
 ```
@@ -16,11 +15,16 @@ module.exports = {
     GameHistoryCollection: COLLECTION_FOR_COMPLETED_GAMES,
     ExpirationTimeInDays: 1
   },
-  loggly: {
-    token: LOGGLY_TOKEN,
-    subdomain: LOGGLY_SUBDOMAIN,
-    tags: [LOGGLY_TAGS],
-    json:true
+  logging: {
+    file: {
+      location: FILE_PATH
+    },
+    loggly: {
+      token: LOGGLY_TOKEN,
+      subdomain: LOGGLY_SUBDOMAIN,
+      tags: [LOGGLY_TAGS],
+      json:true
+    }
   }
 }
 ```
