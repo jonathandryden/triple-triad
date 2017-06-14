@@ -7,11 +7,18 @@ const CardDb = require("./cards.json");
 var hasEmptyCells = function(board) {
   for (let i = 0, len = board.length; i < len; i++) {
     for (let j = 0, len2 = board[i].length; j < len2; j++) {
-      console.log(board[i][j]);
       if (!board[i][j]) return true;
     }
   }
   return false;
+}
+
+var compareCards = function(card, dir, opposingCard, def) {
+  if (opposingCard) {
+    if (opposingCard.color != card.color && card.rank[dir] > opposingCard.rank[def]) {
+      opposingCard.color = card.color;
+    }
+  }
 }
 
 class Game {
@@ -60,48 +67,28 @@ class Game {
     if (this.board[y][x] != undefined) {
       return 1;
     }
-    
+
     this.board[y][x] = card;
 
     var opposingCard = undefined;
     // check top
     if (y - 1 >= 0) {
-      opposingCard = this.board[y - 1][x];
-      if (opposingCard != undefined && opposingCard.color != card.color) {
-        if (card.rank.top > opposingCard.rank.bottom) {
-          opposingCard.color = card.color;
-        }
-      }
+      compareCards(card, "top", this.board[y-1][x], "bottom");
     }
 
     // check right
     if (x + 1 <= 2) {
-      opposingCard = this.board[y][x + 1];
-      if (opposingCard != undefined && opposingCard.color != card.color) {
-        if (card.rank.right > opposingCard.rank.left) {
-          opposingCard.color = card.color;
-        }
-      }
+      compareCards(card, "right", this.board[y][x + 1], "left");
     }
 
     // check bottom
     if (y + 1 <= 2) {
-      opposingCard = this.board[y + 1][x];
-      if (opposingCard != undefined && opposingCard.color != card.color) {
-        if (card.rank.bottom > opposingCard.rank.top) {
-          opposingCard.color = card.color;
-        }
-      }
+      compareCards(card, "bottom", this.board[y+1][x], "top");
     }
 
     // check left
     if (x - 1 >= 0) {
-      opposingCard = this.board[y][x - 1];
-      if (opposingCard != undefined && opposingCard.color != card.color) {
-        if (card.rank.left > opposingCard.rank.right) {
-          opposingCard.color = card.color;
-        }
-      }
+      compareCards(card, "left", this.board[y][x-1], "right");
     }
 
     this.updateScore();

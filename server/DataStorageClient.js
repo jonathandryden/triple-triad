@@ -1,4 +1,5 @@
 const MongoClient = require("mongodb"),
+ObjectID = require("mongodb").ObjectID,
 Game = require("../core/Game.js"),
 Logger = require("./Logger.js"),
 config = require("./config.js"),
@@ -79,12 +80,33 @@ class DataStorageClient{
                 if (err) {
                   Logger.error(err);
                 }
-                
+
                 cb();
               });
             }
           });
         }
+        cb();
+      });
+    });
+  }
+
+  GarbageCollector(cb) {
+    MongoClient.connect(url, function(err, db) {
+      if (err) {
+        Logger.error(err);
+        return;
+      }
+      var collection = db.collection(config.mongo.GameCollection);
+      var expiration = new Date();
+      expiration.setDate(expiration.getDate() - Number(config.mongo.ExpirationTimeInDays));
+      var expirationDate =  ObjectID.createFromTime(expiration / 1000);
+      collection.deleteMany({_id: {$lt:expirationDate}}, function(err, docs) {
+        if (err) {
+          Logger.error(err);
+        }
+
+        cb();
       });
     });
   }

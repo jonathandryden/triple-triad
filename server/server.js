@@ -7,10 +7,14 @@ DataStorageClient = require("./DataStorageClient.js");
 
 // utilities
 var gameCleanUp = function() {
-  Logger.info("Starting archiving old games.");
+  Logger.log("CLEANUP - Archiving");
   DataStorageClient.Archive(function() {
-    Logger.info("Finished archiving old games.");
-    setTimeout(gameCleanUp, (1000 * 60 * 60));
+    Logger.log("CLEANUP - Finished archiving");
+    Logger.log("CLEANUP - Deleting");
+    DataStorageClient.GarbageCollector(function() {
+      Logger.log("CLEANUP - Finished deleting");
+      setTimeout(gameCleanUp, (1000 * 60 * 60));
+    });
   });
 }
 
@@ -83,7 +87,7 @@ var joinGame = function(names) {
 
 var playMove = function(move) {
   let sock = this;
-  console.dir(move);
+
   DataStorageClient.FindGameByName(move.gameName, function(game) {
     if (!game) {
       Logger.warn(`Tried to find a game with the name of ${names.game}. But`
@@ -101,7 +105,7 @@ var playMove = function(move) {
       // TODO: throw error
       Logger.log("Turn is 0");
       return;
-    } 
+    }
     if (numberOfCards(game.players[0].cards) < numberOfCards(game.players[1].cards) && Number(move.player) !== 1) {
       // TODO: throw error
       Logger.log("Turn is 1");

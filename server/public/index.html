@@ -75,9 +75,10 @@
       var selectedCard = undefined;
       var placeToMove = undefined;
       var num = undefined;
+      var turn = 0;
 
       // actions
-      var createGame = function() {
+      var createGame = function(game) {
         socket.emit("create", {game: $("#room").val()
           , player: $("#name").val()});
       }
@@ -89,7 +90,7 @@
         selectedCard = this.id[1];
       }
       var placeCard = function() {
-        // console.log("placetomove " + placeToMove + " selectedCard " + selectCard + " num " + num);
+        if (turn !== num) return;
         if (placeToMove !== undefined || selectedCard === undefined
           || num === undefined) return;
         placeToMove = {x: this.id[0], y: this.id[1]}
@@ -106,6 +107,16 @@
       }
 
       //utilities
+      var numberOfCards = function(cards) {
+        let result = 0;
+        for (let i = 0; i < cards.length; i++) {
+          if (cards[i]) {
+            result++;
+          }
+        }
+        return result;
+      }
+
       var getCardValue = function(card) {
         return (card.color ? "b" : "r") + card.rank.top + card.rank.right
           + card.rank.bottom + card.rank.left;
@@ -115,11 +126,33 @@
         num = (num === undefined ?
           ($("#name").val() === game.players[0].name ? 0 : 1) : num);
 
+        if (numberOfCards(game.players[0].cards) === numberOfCards(game.players[1].cards)) {
+          turn = 0;
+          if (num === turn) {
+            $("#you").css("background-color", "gold");
+            $("#them").css("background-color", "white");
+          } else {
+            $("#them").css("background-color", "gold");
+            $("#you").css("background-color", "white");
+          }
+        } else {
+          turn = 1;
+          if (num === turn) {
+            $("#you").css("background-color", "gold");
+            $("#them").css("background-color", "white");
+          } else {
+            $("#them").css("background-color", "gold");
+            $("#you").css("background-color", "white");
+          }
+        }
+
         // draw board
         for (let y = 0; y < 3; y++) {
           for (let x = 0; x < 3; x++) {
             if (game.board[y][x]) {
               $("#" + x + "" + y).text(getCardValue(game.board[y][x]));
+            } else {
+              $("#" + x + "" + y).text("_____");
             }
           }
         }
