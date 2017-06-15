@@ -189,6 +189,10 @@
 
       // responses
       socket.on("updateGame", updateGame);
+      socket.on("gameExists", function(data) {
+        var values = JSON.parse(data);
+        console.dir(values.msg);
+      });
     });
   </script>
 </body>

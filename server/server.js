@@ -11,7 +11,7 @@ var gameCleanUp = function() {
   DataStorageClient.Archive(function() {
     Logger.log("CLEANUP - Deleting");
     DataStorageClient.GarbageCollector(function() {
-      setTimeout(gameCleanUp, (1000 * 60 * 60));
+      setTimeout(gameCleanUp, ((1000 * 60 * 60) * 6));
     });
   });
 }
@@ -38,6 +38,7 @@ var createGame = function(data) {
     } else {
       Logger.warn(`Tried to create a game with the name of ${names.game}. But`
         + ` game with that name already exists`);
+      sock.emit("error", JSON.stringify({"msg":"A game with this name is already in progress."}));
     }
   });
 }
