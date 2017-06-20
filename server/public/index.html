@@ -1,199 +1,78 @@
-<html><head>
-  <script
-			  src="https://code.jquery.com/jquery-2.2.4.min.js"
-			  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-			  crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"/></script>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
 </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.3/pixi.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body>
-  <input type="text" id="name" placeholder="playername" />
-  <br />
-  <input type="text" id="room" placeholder="roomname" /> <button id="create">create</button> <button id="join">join</button>
-  <br />
-  <br/>
-  <table id="you" style="float:left;"> <!--background-color: #FF9999; 66b2ff-->
-    <tr>
-      <td>YOU <span id="ys">0</span></td>
-    </tr>
-    <tr>
-      <td><button class="card" id="y0">_____</button></td>
-    </tr>
-    <tr>
-      <td><button class="card" id="y1">_____</button></td>
-    </tr>
-    <tr>
-      <td><button class="card" id="y2">_____</button></td>
-    </tr>
-    <tr>
-      <td><button class="card" id="y3">_____</button></td>
-    </tr>
-    <tr>
-      <td><button class="card" id="y4">_____</button></td>
-    </tr>
-  </table>
-  <table style="float:left;">
-    <tr>
-      <td><button class="place" id="00">_____</button></td>
-      <td><button class="place" id="10">_____</button></td>
-      <td><button class="place" id="20">_____</button></td>
-    </tr>
-    <tr>
-      <td><button class="place" id="01">_____</button></td>
-      <td><button class="place" id="11">_____</button></td>
-      <td><button class="place" id="21">_____</button></td>
-    </tr>
-    <tr>
-      <td><button class="place" id="02">_____</button></td>
-      <td><button class="place" id="12">_____</button></td>
-      <td><button class="place" id="22">_____</button></td>
-    </tr>
-  </table>
-  <table id="them" style="float:left;">
-    <tr>
-      <td>THEM <span id="ts">0</span></td>
-    </tr>
-    <tr>
-      <td><button id="t0">_____</button></td>
-    </tr>
-    <tr>
-      <td><button id="t1">_____</button></td>
-    </tr>
-    <tr>
-      <td><button id="t2">_____</button></td>
-    </tr>
-    <tr>
-      <td><button id="t3">_____</button></td>
-    </tr>
-    <tr>
-      <td><button id="t4">_____</button></td>
-    </tr>
-  </table>
+  <script type="text/javascript">
+    var type = "WebGL"
+    if(!PIXI.utils.isWebGLSupported()){
+      type = "canvas"
+    }
+
+    PIXI.utils.sayHello(type)
+  </script>
   <script>
-    $(function() {
-      var socket = io();
+    //Aliases
+    var Container = PIXI.Container,
+      autoDetectRenderer = PIXI.autoDetectRenderer,
+      loader = PIXI.loader,
+      resources = PIXI.loader.resources,
+      Sprite = PIXI.Sprite,
+      Rectangle = PIXI.Rectangle,
+      TextureCache = PIXI.TextureCache;
 
-      var selectedCard = undefined;
-      var placeToMove = undefined;
-      var num = undefined;
-      var turn = 0;
+    //Create a Pixi stage and renderer and add the
+    //renderer.view to the DOM
+    var stage = new Container(),
+      renderer = autoDetectRenderer(360, 640);
+    document.body.appendChild(renderer.view);
 
-      // actions
-      var createGame = function(game) {
-        socket.emit("create", JSON.stringify({game: $("#room").val()
-          , player: $("#name").val()}));
-      }
-      var joinGame = function() {
-        socket.emit("join", JSON.stringify({game: $("#room").val()
-          , player: $("#name").val()}));
-      }
-      var selectCard = function() {
-        selectedCard = this.id[1];
-      }
-      var placeCard = function() {
-        // if (turn !== num) return;
-        // if (placeToMove !== undefined || selectedCard === undefined
-        //   || num === undefined) return;
-        placeToMove = {x: this.id[0], y: this.id[1]}
-        var move = {
-          gameName: $("#room").val(),
-          player: num,
-          cardId: selectedCard,
-          position: placeToMove
-        };
+    //load an image and run the `setup` function when it's done
+    loader
+      .add("img/f13.jpg")
+      .add("img/test.jpg")
+      .on("progress", loadProgressHandler)
+      .load(setup);
 
-        socket.emit("placeCard", JSON.stringify(move));
-        placeToMove = undefined;
-        selectedCard = undefined;
-      }
+    function loadProgressHandler(loader, resource) {
+      console.log("loading " + resource.url);
+      console.log("progress: " + loader.progress + "%");
+    }
 
-      //utilities
-      var numberOfCards = function(cards) {
-        let result = 0;
-        for (let i = 0; i < cards.length; i++) {
-          if (cards[i]) {
-            result++;
-          }
-        }
-        return result;
-      }
+    var cat;
 
-      var getCardValue = function(card) {
-        return (card.color ? "b" : "r") + card.rank.top + card.rank.right
-          + card.rank.bottom + card.rank.left;
-      }
-      var updateGame = function(data) {
-        var game = JSON.parse(data);
-        
-        num = (num === undefined ?
-          ($("#name").val() === game.players[0].name ? 0 : 1) : num);
+    function setup() {
+      console.log("setup");
+      //Create the `cat` sprite, add it to the stage, and render it
+      cat = new Sprite(resources["img/f13.jpg"].texture);
 
-        if (numberOfCards(game.players[0].cards) === numberOfCards(game.players[1].cards)) {
-          turn = 0;
-          if (num === turn) {
-            $("#you").css("background-color", "gold");
-            $("#them").css("background-color", "white");
-          } else {
-            $("#them").css("background-color", "gold");
-            $("#you").css("background-color", "white");
-          }
-        } else {
-          turn = 1;
-          if (num === turn) {
-            $("#you").css("background-color", "gold");
-            $("#them").css("background-color", "white");
-          } else {
-            $("#them").css("background-color", "gold");
-            $("#you").css("background-color", "white");
-          }
-        }
+      var texture = TextureCache["img/test.jpg"];
 
-        // draw board
-        for (let y = 0; y < 3; y++) {
-          for (let x = 0; x < 3; x++) {
-            if (game.board[y][x]) {
-              $("#" + x + "" + y).text(getCardValue(game.board[y][x]));
-            } else {
-              $("#" + x + "" + y).text("_____");
-            }
-          }
-        }
+      var rect = new Rectangle(256,380,64,64);
+      texture.frame = rect;
 
-        // draw your cards
-        var player = num;
-        $("#ys").text(game.score[player]);
-        for (let i = 0; i < 5; i++) {
-          if (game.players[player].cards[i]) {
-            $("#y" + i).text(getCardValue(game.players[player].cards[i]));
-          } else {
-              $("#y"+i).text("_____");
-          }
-        }
+      var rocket = new Sprite(texture);
 
-        // draw other players cards
-        player = num === 0 ? 1 : 0;
-        $("#ts").text(game.score[player]);
-        for (let i = 0; i < game.players[player].cards.length; i++) {
-          if (game.players[player].cards[i]) {
-            $("#t" + i).text(getCardValue(game.players[player].cards[i]));
-          } else {
-            $("#t"+i).text("_____");
-          }
-        }
-      }
 
-      // actions
-      $("#create").click(createGame);
-      $("#join").click(joinGame);
-      $(".card").click(selectCard);
-      $(".place").click(placeCard);
+      cat.x = 96;
+      cat.y = 96;
 
-      // responses
-      socket.on("updateGame", updateGame);
-      socket.on("gameExists", function(data) {
-        var values = JSON.parse(data);
-        console.dir(values.msg);
-      });
-    });
+      stage.addChild(cat);
+      stage.addChild(rocket);
+      gameLoop();
+    }
+
+    function gameLoop() {
+
+      requestAnimationFrame(gameLoop);
+      // console.log("HIO");
+      cat.x += 1;
+      renderer.render(stage);
+    }
   </script>
 </body>
 </html>
