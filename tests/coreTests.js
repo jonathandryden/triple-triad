@@ -7,7 +7,7 @@ const chai      = require("chai"),
       Player    = require("../core/Player.js"),
       mockCards = require("./mock/cards.json");
 
-const drawBoard = function(board) {
+const drawBoard = function drawBoard(board) {
   let msg = "\r\n_________________________\r\n";
   for (let i = 0; i < 3; i++) {
     msg += "[";
@@ -28,7 +28,7 @@ const drawBoard = function(board) {
   msg += "-------------------------\r\n";
 
   console.log(msg);
-}
+};
 
 describe("Card Tests", function() {
   it("Should Create A Card", function() {
@@ -195,9 +195,9 @@ describe("Game Tests", function(){
       status: "In Progress",
       playerTurn: 1,
       board: [
-        [],
-        [],
-        []
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined]
       ],
       players: [
         new Player(mockPlayer1), new Player(mockPlayer2)
