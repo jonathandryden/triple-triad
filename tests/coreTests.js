@@ -5,7 +5,7 @@ const chai      = require("chai"),
       Game      = require("../core/Game.js"),
       Card      = require("../core/Card.js"),
       Player    = require("../core/Player.js"),
-      mockCards = require("./mock/cards.json"),
+      Mock      = require("./mock/Mock.js"),
       Guid      = require("guid");
 
 const drawBoard = function drawBoard(board) {
@@ -14,7 +14,7 @@ const drawBoard = function drawBoard(board) {
     msg += "[";
     for (let j = 0; j < 3; j++) {
       if (board[i][j] != undefined) {
-        msg += " " + (board[i][j].color ? "b" : "r") + board[i][j].rank.top
+        msg += " " + (board[i][j].color === "BLUE" ? "b" : "r") + board[i][j].rank.top
           + board[i][j].rank.right + board[i][j].rank.bottom
           + board[i][j].rank.left + " ";
       } else {
@@ -67,122 +67,18 @@ describe("Player Tests", function() {
   });
 
   it("Should Create A Player With A Hand", function() {
-    let playerProperties = {
-      name: "Alice",
-      number: 1,
-      hand: [
-        {
-          "id": Guid.create().value,
-          "cId": 0,
-          "name":"Dendrobium",
-          "level":1,
-          "game":"IX",
-          "rank":{
-            "top":9,
-            "right":1,
-            "bottom":1,
-            "left":1
-          },
-          "element": null,
-          "color":"RED"
-        },
-        {
-          "id": Guid.create().value,
-          "cId": 0,
-          "name":"Dendrobium",
-          "level":1,
-          "game":"IX",
-          "rank":{
-            "top":9,
-            "right":1,
-            "bottom":1,
-            "left":1
-          },
-          "element": null,
-          "color":"RED"
-        }
-      ]
-    };
+    let playerProperties = Mock.player("RED", 1, 5);
     let player = new Player(playerProperties);
     assert.isNotNull(player);
     assert.equal(player.name, playerProperties.name);
-    assert.equal(player.hand.length, 2);
+    assert.equal(player.hand.length, 5);
   });
 });
 
 describe("Game Tests", function(){
-  let mockPlayer1 = {
-      name: "Alice",
-      number: 1,
-      hand: [
-        {
-          "id": Guid.create().value,
-          "cId": 0,
-          "name":"Dendrobium",
-          "level":1,
-          "game":"IX",
-          "rank":{
-            "top":9,
-            "right":1,
-            "bottom":1,
-            "left":1
-          },
-          "element": null,
-          "color":"RED"
-        },
-        {
-          "id": Guid.create().value,
-          "cId": 0,
-          "name":"Dendrobium",
-          "level":1,
-          "game":"IX",
-          "rank":{
-            "top":9,
-            "right":1,
-            "bottom":1,
-            "left":1
-          },
-          "element": null,
-          "color":"RED"
-        }
-      ]
-    },
-    mockPlayer2 = {
-      name: "Bob",
-      number: 2,
-      hand: [
-        {
-          "id": Guid.create().value,
-          "cId": 0,
-          "name":"Dendrobium",
-          "level":1,
-          "game":"IX",
-          "rank":{
-            "top":9,
-            "right":1,
-            "bottom":1,
-            "left":1
-          },
-          "element": null,
-          "color":"BLUE"
-        },
-        {
-          "id": Guid.create().value,
-          "cId": 0,
-          "name":"Dendrobium",
-          "level":1,
-          "game":"IX",
-          "rank":{
-            "top":9,
-            "right":1,
-            "bottom":1,
-            "left":1
-          },
-          "element": null,
-          "color":"BLUE"
-        }
-      ]
-    };
+  let mockPlayer1 = Mock.player("RED", 1, 5),
+      mockPlayer2 = Mock.player("BLUE", 2, 5);
+
   it("Should Create A Game", function() {
     var game = new Game();
     assert.isNotNull(game);
@@ -215,38 +111,205 @@ describe("Game Tests", function(){
     assert.isNotNull(game.board);
     assert.equal(game.players.length, 2);
 
-    game.playMove(1, 0, 0, 0);
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 0, 0);
     assert.isNotNull(game.board[0][0]);
-    assert.equal(game.players[0].hand.length, 1);
+    assert.equal(game.players[0].hand.length, 4);
     assert.equal(game.score[0], 1);
+    assert.equal(game.playerTurn, 2);
     assert.isTrue(game.status !== "Game Over");
   });
 
-  it("Should complete a board", function(){
-    var game = new Game();
+  it("Should Play A Card And Lose From Right (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: [
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined]
+      ],
+      players: [
+        new Player(Mock.weakPlayer("RED", 1, 5)), new Player(Mock.strongPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
     assert.isNotNull(game);
     assert.isNotNull(game.board);
-    var card = mockCards[0];
-    game.placeCard(card, {"x":1,"y":1}); // 9111
-    card = mockCards[1];
-    card.color = true;
-    game.placeCard(card, {"x":0, "y":1}); // 1911
-    card = mockCards[11];
-    game.placeCard(card, {"x":2,"y":0}); // 1111
-    card.color = true;
-    game.placeCard(card, {"x":0,"y":0});
-    card.color = false;
-    game.placeCard(card, {"x": 2, "y": 2});
-    card.color = true;
-    game.placeCard(card, {"x":0, "y": 2});
-    card = mockCards[10];
-    game.placeCard(card, {"x":2, "y":1}); // 9999
-    card.color = true;
-    game.placeCard(card, {"x":1, "y": 0});
-    card.color = false;
-    game.placeCard(card, {"x":1, "y": 2});
-    assert.equal(game.score[0], 8);
-    assert.equal(game.score[1], 1);
-    assert.isTrue(game.isGameOver);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 1, 1);
+
+    assert.equal(game.playerTurn, 2);
+    assert.isNotNull(game.board[0][0]);
+    assert.equal(game.players[0].hand.length, 4);
+    assert.equal(game.score[0], 1);
+    assert.isTrue(game.status !== "Game Over");
+    game.playMove(2, game.players[1].hand[0].id, 2, 1);
+
+    assert.equal(game.playerTurn, 1);
+    assert.isNotNull(game.board[0][1]);
+    assert.equal(game.players[1].hand.length, 4);
+    assert.equal(game.score[1], 2);
+    assert.isTrue(game.status !== "Game Over");
+
+  });
+
+  it("Should Play A Card And Lose From Left (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: [
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined]
+      ],
+      players: [
+        new Player(Mock.weakPlayer("RED", 1, 5)), new Player(Mock.strongPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 1, 1);
+
+    assert.equal(game.playerTurn, 2);
+    assert.isNotNull(game.board[0][0]);
+    assert.equal(game.players[0].hand.length, 4);
+    assert.equal(game.score[0], 1);
+    assert.isTrue(game.status !== "Game Over");
+    game.playMove(2, game.players[1].hand[0].id, 0, 1);
+
+    assert.equal(game.playerTurn, 1);
+    assert.isNotNull(game.board[0][1]);
+    assert.equal(game.players[1].hand.length, 4);
+    assert.equal(game.score[1], 2);
+    assert.isTrue(game.status !== "Game Over");
+
+  });
+
+  it("Should Play A Card And Lose From Top (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: [
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined]
+      ],
+      players: [
+        new Player(Mock.weakPlayer("RED", 1, 5)), new Player(Mock.strongPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 1, 1);
+
+    assert.equal(game.playerTurn, 2);
+    assert.isNotNull(game.board[0][0]);
+    assert.equal(game.players[0].hand.length, 4);
+    assert.equal(game.score[0], 1);
+    assert.isTrue(game.status !== "Game Over");
+    game.playMove(2, game.players[1].hand[0].id, 1, 0);
+
+    assert.equal(game.playerTurn, 1);
+    assert.isNotNull(game.board[0][1]);
+    assert.equal(game.players[1].hand.length, 4);
+    assert.equal(game.score[1], 2);
+    assert.isTrue(game.status !== "Game Over");
+
+  });
+
+  it("Should Play A Card And Lose From Bottom (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: [
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined],
+        [undefined, undefined, undefined]
+      ],
+      players: [
+        new Player(Mock.weakPlayer("RED", 1, 5)), new Player(Mock.strongPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 1, 1);
+
+    assert.equal(game.playerTurn, 2);
+    assert.isNotNull(game.board[0][0]);
+    assert.equal(game.players[0].hand.length, 4);
+    assert.equal(game.score[0], 1);
+    assert.isTrue(game.status !== "Game Over");
+    game.playMove(2, game.players[1].hand[0].id, 1, 2);
+
+    assert.equal(game.playerTurn, 1);
+    assert.isNotNull(game.board[0][1]);
+    assert.equal(game.players[1].hand.length, 4);
+    assert.equal(game.score[1], 2);
+    assert.isTrue(game.status !== "Game Over");
+
+  });
+
+  it("Should Play A Card And Win All Sides (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: Mock.losingBoard(),
+      players: [
+        new Player(Mock.strongPlayer("RED", 1, 5)), new Player(Mock.weakPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 1, 1);
+
+    assert.equal(game.playerTurn, 2);
+    assert.equal(game.score[0], 5);
+    assert.isTrue(game.status !== "Game Over");
+  });
+
+  it("Should Play A Card And Game Over (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: Mock.fullBoard(),
+      players: [
+        new Player(Mock.strongPlayer("RED", 1, 5)), new Player(Mock.weakPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 2, 2);
+
+    assert.equal(game.playerTurn, 2);
+    assert.equal(game.status, "Game Over");
   });
 });

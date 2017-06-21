@@ -85,6 +85,7 @@ class Game {
 
     this.board[y][x] = card;
     this.players[playerIndex].hand.splice(cardIndex, 1);
+    this.playerTurn = (playerNumber === 1 ? 2 : 1);
 
     // compare top, right, bottom and left cards
     if (y - 1 >= 0) {
