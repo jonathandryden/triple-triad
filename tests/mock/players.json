@@ -1,0 +1,83 @@
+{
+    "normal": {
+      "name": "Alice",
+      "number": 1,
+      "hand": [
+        {
+          "id": "",
+          "cId": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        },
+        {
+          "id": "",
+          "cId": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        },
+        {
+          "id": "",
+          "cId": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        },
+        {
+          "id": "",
+          "cId": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        },
+        {
+          "id": "",
+          "cId": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        }
+      ]
+    }
+}
