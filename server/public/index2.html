@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
+</head>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="pixi.js"></script>
+<body>
+  <script type="text/javascript">
+    var type = "WebGL"
+    if(!PIXI.utils.isWebGLSupported()){
+      type = "canvas"
+    }
+
+    PIXI.utils.sayHello(type)
+  </script>
+
+  <script>
+    var renderer = PIXI.autoDetectRenderer(256, 256, {
+      antialias: false, transparent: false, resolution: 1
+    });
+    renderer.autoResize = true;
+    renderer.view.style.border = "1px dashed black";
+    renderer.backgroundColor = 0x061639;
+
+    document.body.appendChild(renderer.view);
+
+    var stage = new PIXI.Container();
+
+    renderer.render(stage);
+  </script>
+</body>
+</html>

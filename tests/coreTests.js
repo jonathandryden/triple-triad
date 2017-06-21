@@ -1,14 +1,14 @@
 "use strict";
 
-const chai = require("chai");
-const assert = chai.assert;
-const Game = require("../core/Game.js");
-const Card = require("../core/Card.js");
-const Player = require("../core/Player.js");
-const mockCards = require("./mock/cards.json");
+const chai      = require("chai"),
+      assert    = chai.assert,
+      Game      = require("../core/Game.js"),
+      Card      = require("../core/Card.js"),
+      Player    = require("../core/Player.js"),
+      mockCards = require("./mock/cards.json");
 
-var drawBoard = function(board) {
-  var msg = "_________________________\r\n";
+const drawBoard = function(board) {
+  let msg = "\r\n_________________________\r\n";
   for (let i = 0; i < 3; i++) {
     msg += "[";
     for (let j = 0; j < 3; j++) {
@@ -25,39 +25,157 @@ var drawBoard = function(board) {
     }
     msg += "]\r\n";
   }
-  msg += "-------------------------";
+  msg += "-------------------------\r\n";
 
   console.log(msg);
 }
 
-describe("Card Class", function() {
+describe("Card Tests", function() {
   it("Should Create A Card", function() {
-    var card = new Card({
-      "id": 0,
-      "color": "red",
-      "attr": null,
-      "power": {
-        "top": 1,
-        "right": 2,
-        "bottom": 3,
-        "left": 4
-      },
-      "img": "test.png"
-    });
+    let cardProperties =
+      {
+        "id": 0,
+        "name":"Dendrobium",
+        "level":1,
+        "game":"IX",
+        "rank":{
+          "top":9,
+          "right":1,
+          "bottom":1,
+          "left":1
+        },
+        "element": null,
+        "color":"RED"
+      };
+
+    const card = new Card(cardProperties);
     assert.isNotNull(card);
+    assert.equal(card.name, cardProperties.name);
   });
 });
 
-describe("Player Class", function() {
+describe("Player Tests", function() {
   it("Should Create A Player", function() {
-    var player = new Player(1
-      , [undefined, undefined, undefined, undefined, undefined]);
+    let playerProperties = {
+      name: "Alice",
+      number: 1
+    };
+    let player = new Player(playerProperties);
     assert.isNotNull(player);
-    assert.equal(player.cards.length, 5);
+    assert.equal(player.name, playerProperties.name);
+  });
+
+  it("Should Create A Player With A Hand", function() {
+    let playerProperties = {
+      name: "Alice",
+      number: 1,
+      hand: [
+        {
+          "id": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        },
+        {
+          "id": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        }
+      ]
+    };
+    let player = new Player(playerProperties);
+    assert.isNotNull(player);
+    assert.equal(player.name, playerProperties.name);
+    assert.equal(player.hand.length, 2);
   });
 });
 
-describe("Game Class", function(){
+describe("Game Tests", function(){
+  let mockPlayer1 = {
+      name: "Alice",
+      number: 1,
+      hand: [
+        {
+          "id": 0,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        },
+        {
+          "id": 1,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"RED"
+        }
+      ]
+    },
+    mockPlayer2 = {
+      name: "Bob",
+      number: 2,
+      hand: [
+        {
+          "id": 2,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"BLUE"
+        },
+        {
+          "id": 3,
+          "name":"Dendrobium",
+          "level":1,
+          "game":"IX",
+          "rank":{
+            "top":9,
+            "right":1,
+            "bottom":1,
+            "left":1
+          },
+          "element": null,
+          "color":"BLUE"
+        }
+      ]
+    };
   it("Should Create A Game", function() {
     var game = new Game();
     assert.isNotNull(game);
@@ -67,23 +185,34 @@ describe("Game Class", function(){
     assert.equal(game.board[1].length, 3);
     assert.equal(game.board[2].length, 3);
     assert.equal(game.players.length, 2);
-    assert.equal(game.players[0].cards.length, 5);
-    assert.equal(game.players[1].cards.length, 5);
+    assert.equal(game.players[0].hand.length, 5);
+    assert.equal(game.players[1].hand.length, 5);
   });
 
   it("Should Play A Card (MOCK)", function(){
-    var game = new Game();
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 1,
+      board: [
+        [],
+        [],
+        []
+      ],
+      players: [
+        new Player(mockPlayer1), new Player(mockPlayer2)
+      ],
+      score: [0, 0]
+    });
     assert.isNotNull(game);
     assert.isNotNull(game.board);
-    var weakBottom = mockCards[1];
-    game.placeCard(weakBottom, {"x":0, "y":0});
-    var topStrong = mockCards[0];
-    topStrong.color = true;
-    game.placeCard(topStrong, {"x":0, "y":1});
+    assert.equal(game.players.length, 2);
+
+    game.playMove(1, 0, 0, 0);
     assert.isNotNull(game.board[0][0]);
-    assert.isNotNull(game.board[1][0]);
-    assert.equal(game.score[1], 2);
-    assert.isFalse(game.isGameOver);
+    assert.equal(game.players[0].hand.length, 1);
+    assert.equal(game.score[0], 1);
+    assert.isTrue(game.status !== "Game Over");
   });
 
   it("Should complete a board", function(){

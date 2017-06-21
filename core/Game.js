@@ -1,7 +1,7 @@
 const Player = require("./Player.js"),
-  Card = require("./Card.js"),
-  CardDb = require("./cards.json"),
-  Errors = require("./Errors");
+      Card   = require("./Card.js"),
+      CardDb = require("./cards.json"),
+      Errors = require("./Errors");
 
 // utilities
 const hasEmptyCells = function(board) {
@@ -25,22 +25,23 @@ class Game {
   constructor(importedGame) {
     if (importedGame) {
       this.name = importedGame.name;
-      this.isGameOver = importedGame.isGameOver;
-      this.board = importedGame.board;
-      this.players = importedGame.players;
-      this.score = importedGame.score;
+      this.status = importedGame.status;
+      this.playerTurn = importedGame.playerTurn;
+      this.board = [...importedGame.board];
+      this.players = [...importedGame.players];
+      this.score = [...importedGame.score];
     } else {
       this.name = "Triple Triad";
-      this.isGameOver = false;
+      this.status = "Pre-Game";
       this.playerTurn = 1;
       this.board = [
         [undefined, undefined, undefined],
         [undefined, undefined, undefined],
         [undefined, undefined, undefined]
       ];
-      this.players = [new Player(), new Player()];
+      this.players = [new Player({number: 1}), new Player({number: 2})];
       this.score = [0, 0];
-      dealCards(5);
+      this.dealCards(5);
     }
   }
 
@@ -51,13 +52,11 @@ class Game {
     for (let k = 0; k < 2; k++) {
       for (let i = 0; i < numberOfCards; i++) {
         randomCardId = Math.floor((Math.random() * CardDb.length));
-        for (let j = 0; j < CardDb.length; j++) {
-          card = CardDb[j];
-          if (k === 0) card.color = "red";
-          tempDeck.push(card);
-        }
+        card = CardDb[randomCardId];
+        if (k === 1) card.color = "BLUE";
+        tempDeck.push(card);
       }
-      this.players.hand = [...tempdDeck];
+      this.players[k].hand = [...tempDeck];
       tempDeck = [];
     }
   }
@@ -65,16 +64,18 @@ class Game {
   playMove(playerNumber, cardId, xLocation, yLocation) {
     let x = xLocation,
       y = yLocation,
-      cardIndex = this.player[playerNumber - 1].hand.findIndex(item => item.id === cardId),
-      card = this.players[playerNumber - 1].hand[cardIndex],
+      playerIndex = playerNumber - 1,
+      cardIndex = this.players[playerIndex].hand.findIndex(item => item.id === cardId),
+      card = this.players[playerIndex].hand[cardIndex],
       opposingCard;
 
     if (this.playerTurn !== playerNumber || this.board[y][x] || !card) {
       // err
+      console.error("playMove error \r\nthis.playerTurn !== playerNumber || this.board[y][x] || !card\r\n" + this.playerTurn !== playerNumber + " " + this.board[y][x] + " " + !card);
     }
 
     this.board[y][x] = card;
-    this.player[playerNumber].hand.splice(cardIndex, 1);
+    this.players[playerIndex].hand.splice(cardIndex, 1);
 
     // check top
     if (y - 1 >= 0) {
@@ -105,7 +106,7 @@ class Game {
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
         if (this.board[i][j]) {
-          if (this.board[i][j].color === "red") {
+          if (this.board[i][j].color === "RED") {
             this.score[0]++;
           } else {
             this.score[1]++;
@@ -114,7 +115,7 @@ class Game {
       }
     }
 
-    if (!hasEmptyCells(this.board)) this.isGameOver = true;
+    if (!hasEmptyCells(this.board)) this.status = true;
   }
 }
 

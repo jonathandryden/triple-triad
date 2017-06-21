@@ -3,9 +3,8 @@ class Card {
     this.id = properties.id;
     this.name = properties.name;
     this.color = properties.color;
-    this.attr = properties.attr;
+    this.element = properties.element;
     this.rank = properties.rank;
-    this.img = properties.img;
   }
 }
 

@@ -10,8 +10,8 @@
       "bottom":1,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 1,
@@ -24,8 +24,8 @@
       "bottom":1,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 2,
@@ -38,8 +38,8 @@
       "bottom":9,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 3,
@@ -52,8 +52,8 @@
       "bottom":1,
       "left":9
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 4,
@@ -66,8 +66,8 @@
       "bottom":1,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 5,
@@ -80,8 +80,8 @@
       "bottom":9,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 6,
@@ -94,8 +94,8 @@
       "bottom":1,
       "left":9
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 7,
@@ -108,8 +108,8 @@
       "bottom":9,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 8,
@@ -122,8 +122,8 @@
       "bottom":9,
       "left":9
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 9,
@@ -136,8 +136,8 @@
       "bottom":9,
       "left":9
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 10,
@@ -150,8 +150,8 @@
       "bottom":9,
       "left":9
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   },
   {
     "id": 11,
@@ -164,7 +164,7 @@
       "bottom":1,
       "left":1
     },
-    "attr": null,
-    "color":false
+    "element": null,
+    "color":"RED"
   }
 ]
