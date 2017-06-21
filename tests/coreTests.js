@@ -5,7 +5,8 @@ const chai      = require("chai"),
       Game      = require("../core/Game.js"),
       Card      = require("../core/Card.js"),
       Player    = require("../core/Player.js"),
-      mockCards = require("./mock/cards.json");
+      mockCards = require("./mock/cards.json"),
+      Guid      = require("guid");
 
 const drawBoard = function drawBoard(board) {
   let msg = "\r\n_________________________\r\n";
@@ -71,7 +72,8 @@ describe("Player Tests", function() {
       number: 1,
       hand: [
         {
-          "id": 0,
+          "id": Guid.create().value,
+          "cId": 0,
           "name":"Dendrobium",
           "level":1,
           "game":"IX",
@@ -85,7 +87,8 @@ describe("Player Tests", function() {
           "color":"RED"
         },
         {
-          "id": 0,
+          "id": Guid.create().value,
+          "cId": 0,
           "name":"Dendrobium",
           "level":1,
           "game":"IX",
@@ -113,7 +116,8 @@ describe("Game Tests", function(){
       number: 1,
       hand: [
         {
-          "id": 0,
+          "id": Guid.create().value,
+          "cId": 0,
           "name":"Dendrobium",
           "level":1,
           "game":"IX",
@@ -127,7 +131,8 @@ describe("Game Tests", function(){
           "color":"RED"
         },
         {
-          "id": 1,
+          "id": Guid.create().value,
+          "cId": 0,
           "name":"Dendrobium",
           "level":1,
           "game":"IX",
@@ -147,7 +152,8 @@ describe("Game Tests", function(){
       number: 2,
       hand: [
         {
-          "id": 2,
+          "id": Guid.create().value,
+          "cId": 0,
           "name":"Dendrobium",
           "level":1,
           "game":"IX",
@@ -161,7 +167,8 @@ describe("Game Tests", function(){
           "color":"BLUE"
         },
         {
-          "id": 3,
+          "id": Guid.create().value,
+          "cId": 0,
           "name":"Dendrobium",
           "level":1,
           "game":"IX",

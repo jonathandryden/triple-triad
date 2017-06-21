@@ -1,10 +1,10 @@
 class Card {
   constructor(properties) {
-    this.id = properties.id;
-    this.name = properties.name;
-    this.color = properties.color;
+    this.cId      = properties.cId;
+    this.name    = properties.name;
+    this.color   = properties.color;
     this.element = properties.element;
-    this.rank = properties.rank;
+    this.rank    = properties.rank;
   }
 }
 

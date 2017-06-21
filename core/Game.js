@@ -1,21 +1,22 @@
 const Player = require("./Player.js"),
       Card   = require("./Card.js"),
       CardDb = require("./cards.json"),
+      Guid   = require("guid"),
       Errors = require("./Errors");
 
 // utilities
 const hasEmptyCells = function hasEmptyCells(board) {
-  for (let i = 0, len = board.length; i < len; i++) {
-    for (let j = 0, len2 = board[i].length; j < len2; j++) {
-      if (!board[i][j]) return true;
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (!board[row][col]) return true;
     }
   }
   return false;
 };
 
-const compareCards = function compareCards(card, dir, opposingCard, def) {
+const compareCards = function compareCards(card, attackingDir, opposingCard, defendingDir) {
   if (opposingCard) {
-    if (opposingCard.color !== card.color && card.rank[dir] > opposingCard.rank[def]) {
+    if (opposingCard.color !== card.color && card.rank[attackingDir] > opposingCard.rank[defendingDir]) {
       opposingCard.color = card.color;
     }
   }
@@ -41,7 +42,7 @@ class Game {
                         ];
       this.players    = [new Player({number: 1}), new Player({number: 2})];
       this.score      = [0, 0];
-      
+
       this.dealCards(5);
     }
   }
@@ -55,9 +56,15 @@ class Game {
       for (let cardCounter = 0; cardCounter < numberOfCards; cardCounter++) {
         randomCardId = Math.floor((Math.random() * CardDb.length));
         card = CardDb[randomCardId];
-        if (playerIndex === 1) card.color = "BLUE";
+
+        if (playerIndex === 1) {
+          card.color = "BLUE";
+        }
+
+        card.id = Guid.create().value;
         tempDeck.push(card);
       }
+
       this.players[playerIndex].hand = [...tempDeck];
       tempDeck = [];
     }

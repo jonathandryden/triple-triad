@@ -1,6 +1,6 @@
 [
   {
-    "id": 0,
+    "cId": 0,
     "name":"Dendrobium",
     "level":1,
     "game":"IX",
@@ -14,7 +14,7 @@
     "color":"RED"
   },
   {
-    "id": 1,
+    "cId": 1,
     "name":"Feather Circle",
     "level":1,
     "game":"IX",
@@ -28,7 +28,7 @@
     "color":"RED"
   },
   {
-    "id": 2,
+    "cId": 2,
     "name":"Flan",
     "level":1,
     "game":"IX",
@@ -42,7 +42,7 @@
     "color":"RED"
   },
   {
-    "id": 3,
+    "cId": 3,
     "name":"Garuda",
     "level":1,
     "game":"IX",
@@ -56,7 +56,7 @@
     "color":"RED"
   },
   {
-    "id": 4,
+    "cId": 4,
     "name":"Ghost",
     "level":1,
     "game":"IX",
@@ -70,7 +70,7 @@
     "color":"RED"
   },
   {
-    "id": 5,
+    "cId": 5,
     "name":"Hedgehogpie",
     "level":1,
     "game":"IX",
@@ -84,7 +84,7 @@
     "color":"RED"
   },
   {
-    "id": 6,
+    "cId": 6,
     "name":"Hornet",
     "level":1,
     "game":"IX",
@@ -98,7 +98,7 @@
     "color":"RED"
   },
   {
-    "id": 7,
+    "cId": 7,
     "name":"Ladybug",
     "level":1,
     "game":"IX",
@@ -112,7 +112,7 @@
     "color":"RED"
   },
   {
-    "id": 8,
+    "cId": 8,
     "name":"Mandragora",
     "level":1,
     "game":"IX",
@@ -126,7 +126,7 @@
     "color":"RED"
   },
   {
-    "id": 9,
+    "cId": 9,
     "name":"Mu",
     "level":1,
     "game":"IX",
@@ -140,7 +140,7 @@
     "color":"RED"
   },
   {
-    "id": 10,
+    "cId": 10,
     "name":"Skeleton",
     "level":1,
     "game":"IX",
@@ -154,7 +154,7 @@
     "color":"RED"
   },
   {
-    "id": 11,
+    "cId": 11,
     "name":"Paper",
     "level":1,
     "game":"IX",
