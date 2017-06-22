@@ -80,7 +80,8 @@ class Game {
 
     if (this.playerTurn !== playerNumber || this.board[y][x] || !card) {
       // err
-      console.error("playMove error \r\nthis.playerTurn !== playerNumber || this.board[y][x] || !card\r\n" + this.playerTurn !== playerNumber + " " + this.board[y][x] + " " + !card);
+      // console.error("playMove error \r\nthis.playerTurn !== playerNumber || this.board[y][x] || !card\r\n" + this.playerTurn !== playerNumber + " " + this.board[y][x] + " " + !card);
+      return;
     }
 
     this.board[y][x] = card;

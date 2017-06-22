@@ -103,14 +103,14 @@ describe("Game Tests", function(){
         [undefined, undefined, undefined]
       ],
       players: [
-        new Player(mockPlayer1), new Player(mockPlayer2)
+        new Player(Mock.weakPlayer("RED", 1, 5)), new Player(Mock.strongPlayer("BLUE", 2, 5))
       ],
       score: [0, 0]
     });
     assert.isNotNull(game);
     assert.isNotNull(game.board);
     assert.equal(game.players.length, 2);
-
+    
     assert.equal(game.players[0].hand.length, 5);
     game.playMove(1, game.players[0].hand[0].id, 0, 0);
     assert.isNotNull(game.board[0][0]);
@@ -311,5 +311,28 @@ describe("Game Tests", function(){
 
     assert.equal(game.playerTurn, 2);
     assert.equal(game.status, "Game Over");
+  });
+
+  it("Should Not Play Card On Wrong Turn (MOCK)", function(){
+    var game = new Game({
+      name: "Test Game",
+      status: "In Progress",
+      playerTurn: 2,
+      board: Mock.losingBoard(),
+      players: [
+        new Player(Mock.strongPlayer("RED", 1, 5)), new Player(Mock.weakPlayer("BLUE", 2, 5))
+      ],
+      score: [0, 0]
+    });
+    assert.isNotNull(game);
+    assert.isNotNull(game.board);
+    assert.equal(game.players.length, 2);
+
+    assert.equal(game.players[0].hand.length, 5);
+    game.playMove(1, game.players[0].hand[0].id, 2, 2);
+
+    assert.equal(game.playerTurn, 2);
+    assert.isUndefined(game.board[2][2]);
+    assert.notEqual(game.status, "Game Over");
   });
 });

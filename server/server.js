@@ -6,7 +6,7 @@ Player = require("../core/Player.js"),
 DataStorageClient = require("./DataStorageClient.js");
 
 // utilities
-var gameCleanUp = function() {
+const gameCleanUp = function() {
   Logger.log("CLEANUP - Archiving");
   DataStorageClient.Archive(function() {
     Logger.log("CLEANUP - Deleting");
@@ -17,7 +17,7 @@ var gameCleanUp = function() {
 }
 
 // routes
-var createGame = function(data) {
+const createGame = function(data) {
   let names = JSON.parse(data),
   sock = this;
 
@@ -43,7 +43,7 @@ var createGame = function(data) {
   });
 }
 
-var joinGame = function(data) {
+const joinGame = function(data) {
   let names = JSON.parse(names),
   sock = this;
 
@@ -78,7 +78,7 @@ var joinGame = function(data) {
   });
 }
 
-var playMove = function(data) {
+const playMove = function(data) {
   let move = JSON.parse(data),
   sock = this;
 
